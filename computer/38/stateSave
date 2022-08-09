@@ -1,1 +1,7 @@
--2826,67,-2826,South,2
+{
+  y = "67",
+  direction = "South",
+  z = "-2828",
+  selectedSlot = 5,
+  x = "4310",
+}

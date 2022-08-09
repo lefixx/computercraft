@@ -63,37 +63,29 @@ function goForward()
 end
 
 function saveCurrentState()
+    writeLocationToFile()
     local x,y,z = readLocationFromFile()
+    print(x,y,z )
     local direction = readDirectionFromFile()
     local selectedSlot = turtle.getSelectedSlot()
     local currentState = z..","..y..","..z..","..direction..","..selectedSlot
     local file = fs.open("stateSave","w")
-    file.write(currentState)
+
+    local state = {}
+    state["x"] = x
+    state["y"] = y
+    state["z"] = z
+    state["direction"] = direction
+    state["selectedSlot"] = selectedSlot
+    file.write(textutils.serialise(state))
     file.close()
 end
 
-function getCurrentState()
+function getSavedState()
     local file = fs.open("stateSave","r")
-    file = file.readAll()
-
-    local nextCommaLocation,b = string.find(file,",") --finds next comma locatin
-    local x = string.sub(file,1,nextCommaLocation-1)  --extracts up to first comma location to x 
-    -- print(x)
-    file = string.sub(file,nextCommaLocation+1)   --crops up to first comma location
-
-    nextCommaLocation,b = string.find(file,",")
-    local y = string.sub(file,1,nextCommaLocation-1)
-    file = string.sub(file,nextCommaLocation+1)
-
-    nextCommaLocation,b = string.find(file,",")
-    local z = string.sub(file,1,nextCommaLocation-1)
-    file = string.sub(file,nextCommaLocation+1)
-
-    nextCommaLocation,b = string.find(file,",")
-    local dir = string.sub(file,1,nextCommaLocation-1)
-    slot = string.sub(file,nextCommaLocation+1)
-
-    return x,y,z,dir,slot
+    state = textutils.unserialise(file.readAll())
+    file.close()
+    return state
 end
 
 function go(dir)
@@ -104,8 +96,7 @@ end
 
 function turnTowards(dir)
     currentDirection = readDirectionFromFile()
-    print(currentDirection)
-    print(dir)
+    print("turn towards",dir)
     if dir == currentDirection then return true
     elseif dir == "North" then
         if currentDirection == "South" then
@@ -150,12 +141,11 @@ function turnTowards(dir)
     end
 end
 
-
 function moveTo(loc)
     local sx,sy,sz = writeLocationToFile()
-    print("I am at      ",sx,sy,sz)
+    -- print("I am at      ",sx,sy,sz)
     local tx,ty,tz = loc[1],loc[2],loc[3]
-    print("I am going to",tx,ty,tz)
+    -- print("I am going to",tx,ty,tz)
     if sx == tx and sy == ty and sz == tz then
         print("done")
         return true
@@ -168,15 +158,24 @@ function moveTo(loc)
     end            
 end
 
-
+function resume()
+    print("resuming")
+    local state = getSavedState()
+    moveTo({state["x"]+0,state["y"]+0,state["z"]+0})
+    -- asdfkja;sldkfja;slkdfjasl;kdfja;slkdfja;sl
+    turnTowards(state["direction"])
+    turtle.select(state["selectedSlot"]+0)
+end
 
 function goAndRefuel()
     if turtle.getFuelLevel() <10000 then
         print("less than 10% fuel")
         saveCurrentState()
         moveTo(refuelingStation)
-        turnTowards("West")
-        refuelFromRefuelingStation()
+        turnTowards("North")
+        turtle.select(16)
+        turtle.suck()
+        turtle.refuel(64)
         resume()
     end
 end
