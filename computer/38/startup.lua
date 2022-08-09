@@ -1,6 +1,7 @@
 shell.run("clear")
 
-RefuelingStation = {4313, 68, -2832}
+refuelingStation = {4313, 67, -2832}
+otherPoint = {4317, 67, -2826}
 
 function writeLocationToFile()
     local x,y,z = gps.locate()
@@ -10,6 +11,7 @@ function writeLocationToFile()
     loc = fs.open("loc","r")
     -- print(loc.read(100))
     loc.close()
+    return x,y,z
 end
 
 function readLocationFromFile()
@@ -94,10 +96,79 @@ function getCurrentState()
     return x,y,z,dir,slot
 end
 
-function moveTo(loc)
-    local x,y,z = loc[1],loc[2],loc[3]
-    print(x,y,z)
+function go(dir)
+    print("going",dir)
+    turnTowards(dir)
+    goForward()
 end
+
+function turnTowards(dir)
+    currentDirection = readDirectionFromFile()
+    print(currentDirection)
+    print(dir)
+    if dir == currentDirection then return true
+    elseif dir == "North" then
+        if currentDirection == "South" then
+            turtle.turnRight()
+            turtle.turnRight()
+        elseif currentDirection == "East" then
+            turtle.turnLeft()
+        elseif currentDirection == "West" then
+            turtle.turnRight()
+        end
+        writeDirectionToFile("North")
+    elseif dir == "South" then
+        if currentDirection == "North" then
+            turtle.turnRight()
+            turtle.turnRight()
+        elseif currentDirection == "East" then
+            turtle.turnRight()
+        elseif currentDirection == "West" then
+            turtle.turnLeft()
+        end
+        writeDirectionToFile("South")
+    elseif dir == "East" then
+        if currentDirection == "West" then
+            turtle.turnRight()
+            turtle.turnRight()
+        elseif currentDirection == "North" then
+            turtle.turnRight()
+        elseif currentDirection == "South" then
+            turtle.turnLeft()
+        end
+        writeDirectionToFile("East")
+    elseif dir == "West" then
+        if currentDirection == "East" then
+            turtle.turnRight()
+            turtle.turnRight()
+        elseif currentDirection == "South" then
+            turtle.turnRight()
+        elseif currentDirection == "North" then
+            turtle.turnLeft()
+        end
+        writeDirectionToFile("West")
+    end
+end
+
+
+function moveTo(loc)
+    local sx,sy,sz = writeLocationToFile()
+    print("I am at      ",sx,sy,sz)
+    local tx,ty,tz = loc[1],loc[2],loc[3]
+    print("I am going to",tx,ty,tz)
+    if sx == tx and sy == ty and sz == tz then
+        print("done")
+        return true
+    elseif tx > sx then go("East") moveTo(loc)
+    elseif tx < sx then go("West") moveTo(loc)
+    else
+        if tz < sz then go("North") moveTo(loc)
+        elseif tz > sz then go("South") moveTo(loc)
+        end
+    end            
+end
+
+
 
 function goAndRefuel()
     if turtle.getFuelLevel() <10000 then
@@ -109,5 +180,7 @@ function goAndRefuel()
     end
 end
 
-moveTo(RefuelingStation)
+moveTo(refuelingStation)
+moveTo(otherPoint)
+
 print"program end"
