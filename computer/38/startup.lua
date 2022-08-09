@@ -174,13 +174,13 @@ function goAndRefuel()
     if turtle.getFuelLevel() <10000 then
         print("less than 10% fuel")
         saveCurrentState()
-        moveTo("RefuelingStation")
+        moveTo(refuelingStation)
+        turnTowards("West")
         refuelFromRefuelingStation()
         resume()
     end
 end
 
-moveTo(refuelingStation)
-moveTo(otherPoint)
+goAndRefuel()
 
 print"program end"
