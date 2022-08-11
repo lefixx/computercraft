@@ -7,6 +7,8 @@ cabbage = {4315, 64, -2828}
 beetroot = {4315, 64, -2825}
 carrot = {4315, 64, -2822}
 tomato = {4315, 64, -2819}
+potato = {4315, 64, -2816}
+onion = {4315, 64, -2813}
 
 function writeLocationToFile()
     local x,y,z = gps.locate()
@@ -94,7 +96,7 @@ function getSavedState()
 end
 
 function go(dir)
-    print("going",dir)
+    -- print("going",dir)
     turnTowards(dir)
     goForward()
 end
@@ -147,7 +149,9 @@ function turnTowards(dir)
 end
 
 function moveTo(loc)
+    checkFuelAndRefuel()
     --TODO include directiont o turn after and refactor all relevant code
+    --TODO move on the North/south axis first
     local sx,sy,sz = writeLocationToFile()
     -- print("I am at      ",sx,sy,sz)
     local tx,ty,tz = loc[1],loc[2],loc[3]
@@ -173,7 +177,8 @@ function resume()
     turtle.select(state["selectedSlot"]+0)
 end
 
-function goAndRefuel()
+function checkFuelAndRefuel()
+    print("fuel :",turtle.getFuelLevel())
     if turtle.getFuelLevel() <10000 then
         print("less than 10% fuel")
         saveCurrentState()
@@ -201,6 +206,16 @@ function getType()
     end
 end
 
+function emptyInv()
+    moveTo(inventoryStation)
+    turnTowards("North")
+    for i = 16,1,-1 do -- -1 so when it finishes slot 1 is selected
+        turtle.select(i)
+        turtle.drop()
+    end
+    
+end
+
 function cultivate()
     local type = getType()
     if type == "minecraft:wheat" or type == "farmersdelight:cabbages" or type == "farmersdelight:tomatoes" then
@@ -219,7 +234,7 @@ function cultivate()
             turtle.select(2)
             turtle.placeDown()
         end
-    elseif type == "minecraft:carrots" then
+    elseif type == "minecraft:carrots" or type == "minecraft:potatoes" or type =="farmersdelight:onions" then
 
         local a,block = turtle.inspectDown()
         if block.state.age == 7 then
@@ -371,20 +386,71 @@ function glideTomato()
 
 end
 
-function emptyInv()
-    moveTo(inventoryStation)
-    turnTowards("North")
-    for i = 16,1,-1 do -- -1 so when it finishes slot 1 is selected
-        turtle.select(i)
-        turtle.drop()
-    end
+function glidePotato()
+
+    emptyInv()
+
+    moveTo(potato)
+    turnTowards("East")
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
     
+    turnTowards("South")
+    goForward()
+    turnTowards("West")
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+
+    emptyInv()
+
+end
+
+function glideOnion()
+
+    emptyInv()
+
+    moveTo(onion)
+    turnTowards("East")
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    
+    turnTowards("South")
+    goForward()
+    turnTowards("West")
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+
+    emptyInv()
+
 end
 
 -- glideWheat()
 -- glideCabbage()
 -- glideBeetroot()
 -- glideCarrot()
-glideTomato()
+-- glideTomato()
+-- glidePotato()
+glideOnion()
+
 
 print"program end"
