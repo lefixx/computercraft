@@ -5,6 +5,8 @@ inventoryStation = {4314, 68, -2832}
 wheat = {4315, 64, -2831}
 cabbage = {4315, 64, -2828}
 beetroot = {4315, 64, -2825}
+carrot = {4315, 64, -2822}
+tomato = {4315, 64, -2819}
 
 function writeLocationToFile()
     local x,y,z = gps.locate()
@@ -201,7 +203,7 @@ end
 
 function cultivate()
     local type = getType()
-    if type == "minecraft:wheat" or type == "farmersdelight:cabbages" then
+    if type == "minecraft:wheat" or type == "farmersdelight:cabbages" or type == "farmersdelight:tomatoes" then
         local a,block = turtle.inspectDown()
         if block.state.age == 7 then
             turtle.select(1)
@@ -215,6 +217,14 @@ function cultivate()
             turtle.select(1)
             turtle.digDown()
             turtle.select(2)
+            turtle.placeDown()
+        end
+    elseif type == "minecraft:carrots" then
+
+        local a,block = turtle.inspectDown()
+        if block.state.age == 7 then
+            turtle.digDown()
+            turtle.select(1)
             turtle.placeDown()
         end
     end
@@ -303,6 +313,64 @@ function glideBeetroot()
 
 end
 
+function glideCarrot()
+
+    emptyInv()
+
+    moveTo(carrot)
+    turnTowards("East")
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    
+    turnTowards("South")
+    goForward()
+    turnTowards("West")
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+
+    emptyInv()
+
+end
+
+function glideTomato()
+
+    emptyInv()
+
+    moveTo(tomato)
+    turnTowards("East")
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    
+    turnTowards("South")
+    goForward()
+    turnTowards("West")
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+
+    emptyInv()
+
+end
+
 function emptyInv()
     moveTo(inventoryStation)
     turnTowards("North")
@@ -313,8 +381,10 @@ function emptyInv()
     
 end
 
-glideBeetroot()
-glideWheat()
-glideCabbage()
+-- glideWheat()
+-- glideCabbage()
+-- glideBeetroot()
+-- glideCarrot()
+glideTomato()
 
 print"program end"
