@@ -1,7 +1,10 @@
 shell.run("clear")
 
-refuelingStation = {4313, 67, -2832}
-otherPoint = {4317, 67, -2826}
+refuelingStation = {4313, 68, -2832}
+inventoryStation = {4314, 68, -2832}
+wheat = {4315, 64, -2831}
+cabbage = {4315, 64, -2828}
+beetroot = {4315, 64, -2825}
 
 function writeLocationToFile()
     local x,y,z = gps.locate()
@@ -34,7 +37,7 @@ function writeDirectionToFile(dir)
     local file = fs.open("dir","w")
     file.write(dir)
     file.close()
-    print("wrote direction to file: ",dir)
+    -- print("wrote direction to file: ",dir)
 end
 
 function readDirectionFromFile()
@@ -96,7 +99,7 @@ end
 
 function turnTowards(dir)
     currentDirection = readDirectionFromFile()
-    print("turn towards",dir)
+    -- print("turn towards",dir)
     if dir == currentDirection then return true
     elseif dir == "North" then
         if currentDirection == "South" then
@@ -142,6 +145,7 @@ function turnTowards(dir)
 end
 
 function moveTo(loc)
+    --TODO include directiont o turn after and refactor all relevant code
     local sx,sy,sz = writeLocationToFile()
     -- print("I am at      ",sx,sy,sz)
     local tx,ty,tz = loc[1],loc[2],loc[3]
@@ -180,6 +184,137 @@ function goAndRefuel()
     end
 end
 
-goAndRefuel()
+function getType()
+
+    local a,block = turtle.inspectDown()
+    
+    -- print(textutils.serialise(block))
+    -- local file = fs.open("scratch","w")
+    -- file.write(textutils.serialise(block))
+    -- file.close()
+    -- print(block.name)
+    
+    if a == true then
+        return block.name
+    end
+end
+
+function cultivate()
+    local type = getType()
+    if type == "minecraft:wheat" or type == "farmersdelight:cabbages" then
+        local a,block = turtle.inspectDown()
+        if block.state.age == 7 then
+            turtle.select(1)
+            turtle.digDown()
+            turtle.select(2)
+            turtle.placeDown()
+        end
+    elseif type == "minecraft:beetroots" then
+        local a,block = turtle.inspectDown()
+        if block.state.age == 3 then
+            turtle.select(1)
+            turtle.digDown()
+            turtle.select(2)
+            turtle.placeDown()
+        end
+    end
+end
+
+function glideWheat()
+    emptyInv()
+
+    moveTo(wheat)
+    turnTowards("East")
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    
+    turnTowards("South")
+    goForward()
+    turnTowards("West")
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+
+    emptyInv()
+end
+
+function glideCabbage()
+    emptyInv()
+
+    moveTo(cabbage)
+    turnTowards("East")
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    
+    turnTowards("South")
+    goForward()
+    turnTowards("West")
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+
+    emptyInv()
+end
+
+function glideBeetroot()
+
+    emptyInv()
+
+    moveTo(beetroot)
+    turnTowards("East")
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    
+    turnTowards("South")
+    goForward()
+    turnTowards("West")
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+
+    emptyInv()
+
+end
+
+function emptyInv()
+    moveTo(inventoryStation)
+    turnTowards("North")
+    for i = 16,1,-1 do -- -1 so when it finishes slot 1 is selected
+        turtle.select(i)
+        turtle.drop()
+    end
+    
+end
+
+glideBeetroot()
+glideWheat()
+glideCabbage()
 
 print"program end"

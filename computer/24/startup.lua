@@ -58,3 +58,4 @@ end
 
 
 parallel.waitForAll(makeTiles)
+-- emptyExt()

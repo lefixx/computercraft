@@ -1,0 +1,15 @@
+{
+  state = {
+    age = 7,
+  },
+  name = "farmersdelight:cabbages",
+  tags = {
+    [ "sereneseasons:autumn_crops" ] = true,
+    [ "minecraft:bee_growables" ] = true,
+    [ "minecraft:crops" ] = true,
+    [ "tconstruct:harvestable" ] = true,
+    [ "computercraft:turtle_hoe_harvestable" ] = true,
+    [ "tconstruct:harvestable/crops" ] = true,
+    [ "sereneseasons:winter_crops" ] = true,
+  },
+}
