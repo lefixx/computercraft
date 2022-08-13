@@ -12,7 +12,7 @@ outputSlot = 3
 while true do
     print(furnace.pullItems(peripheral.getName(treeFarmDrawer),3,64,2)) --
     print(furnace.pullItems(peripheral.getName(drawer),logSlot,1,topSlot)) --put wood in top slot
-    print(furnace.pullItems(peripheral.getName(drawer),charcoalSlot,1,topSlot)) --put charcoal in top slot
+    -- print(furnace.pullItems(peripheral.getName(drawer),charcoalSlot,1,topSlot)) --put charcoal in top slot
     print(furnace.pullItems(peripheral.getName(drawer),charcoalSlot,1,bottomSlot)) --put charcoal in bottom slot
     print(drawer.pullItems(peripheral.getName(furnace),outputSlot))
     -- print(drawer.pushItems(peripheral.getName(turtleCoalDrawer),3))
