@@ -1,19 +1,19 @@
 shell.run("clear")
 
-refuelingStation = {4313, 68, -2832}
-inventoryStation = {4314, 68, -2832}
-wheat = {4315, 64, -2831}
-cabbage = {4315, 64, -2828}
-beetroot = {4315, 64, -2825}
-carrot = {4315, 64, -2822}
-tomato = {4315, 64, -2819}
-potato = {4315, 64, -2816}
-onion = {4315, 64, -2813}
-flax = {4315, 64, -2810}
-rice = {4315, 64, -2807}
-pumpkin1 = {4312,64,-2829}
-melon = {4312,64,-2825}
-sugarCane= {4312,64, -2831}
+refuelingStation = {4313, 67, -2832, "North"}
+inventoryStation = {4314, 67, -2832, "North"}
+wheat            = {4315, 67, -2831, "East"}
+cabbage          = {4315, 67, -2828, "East"}
+beetroot         = {4315, 67, -2825, "East"}
+carrot           = {4315, 67, -2822, "East"}
+tomato           = {4315, 67, -2819, "East"}
+potato           = {4315, 67, -2816, "East"}
+onion            = {4315, 67, -2813, "East"}
+flax             = {4315, 67, -2810, "East"}
+rice             = {4315, 67, -2807, "East"}
+pumpkin         =  {4312, 67, -2829, "West"}
+melon            = {4312, 67, -2825, "West"}
+sugarCane        = {4312, 67, -2831, "West"}
 
 function writeLocationToFile()
     local x,y,z = gps.locate()
@@ -156,14 +156,16 @@ end
 
 function moveTo(loc)
     checkFuelAndRefuel()
-    --TODO include directiont o turn after and refactor all relevant code
     --TODO go to x=4314 first
     local sx,sy,sz = writeLocationToFile()
     -- print("I am at      ",sx,sy,sz)
     local tx,ty,tz = loc[1],loc[2],loc[3]
     -- print("I am going to",tx,ty,tz)
     if sx == tx and sy == ty and sz == tz then
-        print("done")
+        -- print("done moving")
+        if loc[4] then
+            turnTowards(loc[4])
+        end
         return true
     elseif tz < sz then go("North") moveTo(loc)
     elseif tz > sz then go("South") moveTo(loc)
@@ -199,7 +201,6 @@ function checkFuelAndRefuel()
         print("less than 10% fuel")
         saveCurrentState()
         moveTo(refuelingStation)
-        turnTowards("North")
         turtle.select(16)
         turtle.suck()
         turtle.refuel(64)
@@ -224,8 +225,11 @@ end
 
 function emptyInv()
     moveTo(inventoryStation)
-    turnTowards("North")
     for i = 1,16 do
+        if turtle.refuel(i) == true then
+            print("BURNABLE")
+            throw()
+        end
         if turtle.getItemCount(i) ~= 0 then
             turtle.select(i)
             turtle.drop()
@@ -284,7 +288,6 @@ function glideWheat()
     emptyInv()
 
     moveTo(wheat)
-    turnTowards("East")
     cultivate()
     goForward()
     cultivate()
@@ -311,7 +314,6 @@ function glideCabbage()
     emptyInv()
 
     moveTo(cabbage)
-    turnTowards("East")
     cultivate()
     goForward()
     cultivate()
@@ -339,7 +341,6 @@ function glideBeetroot()
     emptyInv()
 
     moveTo(beetroot)
-    turnTowards("East")
     cultivate()
     goForward()
     cultivate()
@@ -368,7 +369,6 @@ function glideCarrot()
     emptyInv()
 
     moveTo(carrot)
-    turnTowards("East")
     cultivate()
     goForward()
     cultivate()
@@ -397,7 +397,6 @@ function glideTomato()
     emptyInv()
 
     moveTo(tomato)
-    turnTowards("East")
     cultivate()
     goForward()
     cultivate()
@@ -426,7 +425,6 @@ function glidePotato()
     emptyInv()
 
     moveTo(potato)
-    turnTowards("East")
     cultivate()
     goForward()
     cultivate()
@@ -455,7 +453,6 @@ function glideOnion()
     emptyInv()
 
     moveTo(onion)
-    turnTowards("East")
     cultivate()
     goForward()
     cultivate()
@@ -484,7 +481,6 @@ function glideFlax()
     emptyInv()
     
     moveTo(flax)
-    turnTowards("East")
     cultivate()
     goForward()
     cultivate()
@@ -513,7 +509,6 @@ function glideRice()
     emptyInv()
     
     moveTo(rice)
-    turnTowards("East")
     cultivate()
     goForward()
     cultivate()
@@ -540,8 +535,7 @@ end
 function glidePumpkin()
     emptyInv()
 
-    moveTo(pumpkin1)
-    turnTowards("West")
+    moveTo(pumpkin)
     for i =1,8 do
         if turtle.detect() then
             turtle.dig()
@@ -638,5 +632,4 @@ end
 print"program end"
 
 --todo add a computer that monitors fuel (progress bar maybe?)
---add a function that detects burnables for fuel
 
