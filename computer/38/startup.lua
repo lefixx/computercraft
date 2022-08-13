@@ -9,6 +9,11 @@ carrot = {4315, 64, -2822}
 tomato = {4315, 64, -2819}
 potato = {4315, 64, -2816}
 onion = {4315, 64, -2813}
+flax = {4315, 64, -2810}
+rice = {4315, 64, -2807}
+pumpkin1 = {4312,64,-2829}
+melon = {4312,64,-2825}
+sugarCane= {4312,64, -2831}
 
 function writeLocationToFile()
     local x,y,z = gps.locate()
@@ -51,6 +56,7 @@ function readDirectionFromFile()
 end
     
 function goForward()
+    --add direction validation
     local x,y,z = readLocationFromFile()
     turtle.forward()
     writeLocationToFile()
@@ -151,7 +157,7 @@ end
 function moveTo(loc)
     checkFuelAndRefuel()
     --TODO include directiont o turn after and refactor all relevant code
-    --TODO move on the North/south axis first
+    --TODO go to x=4314 first
     local sx,sy,sz = writeLocationToFile()
     -- print("I am at      ",sx,sy,sz)
     local tx,ty,tz = loc[1],loc[2],loc[3]
@@ -159,13 +165,23 @@ function moveTo(loc)
     if sx == tx and sy == ty and sz == tz then
         print("done")
         return true
-    elseif tx > sx then go("East") moveTo(loc)
-    elseif tx < sx then go("West") moveTo(loc)
+    elseif tz < sz then go("North") moveTo(loc)
+    elseif tz > sz then go("South") moveTo(loc)
     else
-        if tz < sz then go("North") moveTo(loc)
-        elseif tz > sz then go("South") moveTo(loc)
+        if tx > sx then go("East") moveTo(loc)
+        elseif tx < sx then go("West") moveTo(loc)
         end
-    end            
+    end
+
+
+
+    -- elseif tx > sx then go("East") moveTo(loc)
+    -- elseif tx < sx then go("West") moveTo(loc)
+    -- else
+    --     if tz < sz then go("North") moveTo(loc)
+    --     elseif tz > sz then go("South") moveTo(loc)
+    --     end
+    -- end            
 end
 
 function resume()
@@ -241,6 +257,22 @@ function cultivate()
             turtle.digDown()
             turtle.select(1)
             turtle.placeDown()
+        end
+    elseif type == "supplementaries:flax" then
+        local a,block = turtle.inspectDown()
+        if block.state.age == 7 then
+            turtle.select(1)
+            turtle.digDown()
+            turtle.down()
+            turtle.select(2)
+            turtle.placeDown()
+            turtle.up()
+        end
+    elseif type == "farmersdelight:rice_upper_crop" then
+        local a,block = turtle.inspectDown()
+        if block.state.age == 3 then
+            turtle.select(1)
+            turtle.digDown()
         end
     end
 end
@@ -444,13 +476,164 @@ function glideOnion()
 
 end
 
--- glideWheat()
--- glideCabbage()
--- glideBeetroot()
--- glideCarrot()
--- glideTomato()
--- glidePotato()
-glideOnion()
+function glideFlax()
+    
+    emptyInv()
+    
+    moveTo(flax)
+    turnTowards("East")
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    
+    turnTowards("South")
+    goForward()
+    turnTowards("West")
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    
+    emptyInv()
+    
+end
+
+function glideRice()
+    
+    emptyInv()
+    
+    moveTo(rice)
+    turnTowards("East")
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    
+    turnTowards("South")
+    goForward()
+    turnTowards("West")
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    goForward()
+    cultivate()
+    
+    emptyInv()
+    
+end
+
+function glidePumpkin()
+    emptyInv()
+
+    moveTo(pumpkin1)
+    turnTowards("West")
+    for i =1,8 do
+        if turtle.detect() then
+            turtle.dig()
+        end
+        goForward()
+    end
+    goForward()
+    turnTowards("South")
+    if turtle.detect() then
+        turtle.dig()
+    end
+    goForward()
+    goForward()
+    turnTowards("East")
+    for i =1,8 do
+        if turtle.detect() then
+            turtle.dig()
+        end
+        goForward()
+    end
+    goForward()
+    goForward()
+    goForward()
+    emptyInv()
+end
+
+function glideMelon()
+    emptyInv()
+
+    moveTo(melon)
+    turnTowards("West")
+    for i =1,8 do
+        if turtle.detect() then
+            turtle.dig()
+        end
+        goForward()
+    end
+    goForward()
+    turnTowards("South")
+    if turtle.detect() then
+        turtle.dig()
+    end
+    goForward()
+
+    goForward()
+    turnTowards("East")
+    for i =1,8 do
+        if turtle.detect() then
+            turtle.dig()
+        end
+        goForward()
+    end
+    goForward()
+    goForward()
+    goForward()
+    emptyInv()
+end
+
+function glideSugarCane()
+    emptyInv()
+    moveTo(sugarCane)
+    for i = 1,8 do
+        if turtle.detect() then
+            turtle.dig()
+        end
+        turtle.suck()
+        turtle.suckDown()
+        turtle.suckUp()
+        goForward()
+    end
+    emptyInv()
+end
+
+
+while true do 
+    
+    glideWheat()
+    glideCabbage()
+    glideBeetroot()
+    glideCarrot()
+    glideTomato()
+    glidePotato()
+    glideOnion()
+    glideFlax()
+    glideRice()
+    
+    glideSugarCane()
+    glidePumpkin()
+    glideMelon()
+os.sleep(60)
+end
 
 
 print"program end"
+
+--todo add a computer that monitors fuel (progress bar maybe?)
+--add a function that detects burnables for fuel
+
