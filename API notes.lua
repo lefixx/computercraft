@@ -7,4 +7,4 @@ turtle.refuel(count)
 turtle.refuel(0) --One can pass 0 to check if an item is combustable or not.
 
 North = positive Z
-East = positive X
+East = positive X   0   refue
