@@ -225,9 +225,12 @@ end
 function emptyInv()
     moveTo(inventoryStation)
     turnTowards("North")
-    for i = 16,1,-1 do -- -1 so when it finishes slot 1 is selected
-        turtle.select(i)
-        turtle.drop()
+    for i = 1,16 do
+        if turtle.getItemCount(i) ~= 0 then
+            turtle.select(i)
+            turtle.drop()
+        end
+        turtle.select(1)
     end
     
 end
