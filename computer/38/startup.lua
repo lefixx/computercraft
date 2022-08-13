@@ -82,14 +82,15 @@ function saveCurrentState()
     local direction = readDirectionFromFile()
     local selectedSlot = turtle.getSelectedSlot()
     local currentState = z..","..y..","..z..","..direction..","..selectedSlot
-    local file = fs.open("stateSave","w")
-
+    
     local state = {}
     state["x"] = x
     state["y"] = y
     state["z"] = z
     state["direction"] = direction
     state["selectedSlot"] = selectedSlot
+    local file = fs.open("stateSave","w")
+    -- print(textutils.serialise(state))
     file.write(textutils.serialise(state))
     file.close()
 end
@@ -155,7 +156,6 @@ function turnTowards(dir)
 end
 
 function moveTo(loc)
-    checkFuelAndRefuel()
     --TODO go to x=4314 first
     local sx,sy,sz = writeLocationToFile()
     -- print("I am at      ",sx,sy,sz)
@@ -173,17 +173,7 @@ function moveTo(loc)
         if tx > sx then go("East") moveTo(loc)
         elseif tx < sx then go("West") moveTo(loc)
         end
-    end
-
-
-
-    -- elseif tx > sx then go("East") moveTo(loc)
-    -- elseif tx < sx then go("West") moveTo(loc)
-    -- else
-    --     if tz < sz then go("North") moveTo(loc)
-    --     elseif tz > sz then go("South") moveTo(loc)
-    --     end
-    -- end            
+    end          
 end
 
 function resume()
@@ -196,8 +186,9 @@ function resume()
 end
 
 function checkFuelAndRefuel()
+    print"-=-"
     print("fuel :",turtle.getFuelLevel())
-    if turtle.getFuelLevel() <10000 then
+    if turtle.getFuelLevel() <33265 then
         print("less than 10% fuel")
         saveCurrentState()
         moveTo(refuelingStation)
@@ -209,7 +200,7 @@ function checkFuelAndRefuel()
 end
 
 function getType()
-
+    
     local a,block = turtle.inspectDown()
     
     -- print(textutils.serialise(block))
@@ -224,6 +215,7 @@ function getType()
 end
 
 function emptyInv()
+    checkFuelAndRefuel()
     moveTo(inventoryStation)
     for i = 1,16 do
         if turtle.refuel(i) == true then
@@ -258,7 +250,7 @@ function cultivate()
             turtle.placeDown()
         end
     elseif type == "minecraft:carrots" or type == "minecraft:potatoes" or type =="farmersdelight:onions" then
-
+        
         local a,block = turtle.inspectDown()
         if block.state.age == 7 then
             turtle.digDown()
@@ -286,7 +278,7 @@ end
 
 function glideWheat()
     emptyInv()
-
+    
     moveTo(wheat)
     cultivate()
     goForward()
@@ -306,13 +298,13 @@ function glideWheat()
     cultivate()
     goForward()
     cultivate()
-
+    
     emptyInv()
 end
 
 function glideCabbage()
     emptyInv()
-
+    
     moveTo(cabbage)
     cultivate()
     goForward()
@@ -332,14 +324,14 @@ function glideCabbage()
     cultivate()
     goForward()
     cultivate()
-
+    
     emptyInv()
 end
 
 function glideBeetroot()
-
+    
     emptyInv()
-
+    
     moveTo(beetroot)
     cultivate()
     goForward()
@@ -359,15 +351,15 @@ function glideBeetroot()
     cultivate()
     goForward()
     cultivate()
-
+    
     emptyInv()
-
+    
 end
 
 function glideCarrot()
-
+    
     emptyInv()
-
+    
     moveTo(carrot)
     cultivate()
     goForward()
@@ -387,15 +379,15 @@ function glideCarrot()
     cultivate()
     goForward()
     cultivate()
-
+    
     emptyInv()
-
+    
 end
 
 function glideTomato()
-
+    
     emptyInv()
-
+    
     moveTo(tomato)
     cultivate()
     goForward()
@@ -415,15 +407,15 @@ function glideTomato()
     cultivate()
     goForward()
     cultivate()
-
+    
     emptyInv()
-
+    
 end
 
 function glidePotato()
-
+    
     emptyInv()
-
+    
     moveTo(potato)
     cultivate()
     goForward()
@@ -443,15 +435,15 @@ function glidePotato()
     cultivate()
     goForward()
     cultivate()
-
+    
     emptyInv()
-
+    
 end
 
 function glideOnion()
-
+    
     emptyInv()
-
+    
     moveTo(onion)
     cultivate()
     goForward()
@@ -471,9 +463,9 @@ function glideOnion()
     cultivate()
     goForward()
     cultivate()
-
+    
     emptyInv()
-
+    
 end
 
 function glideFlax()
@@ -534,7 +526,7 @@ end
 
 function glidePumpkin()
     emptyInv()
-
+    
     moveTo(pumpkin)
     for i =1,8 do
         if turtle.detect() then
@@ -564,7 +556,7 @@ end
 
 function glideMelon()
     emptyInv()
-
+    
     moveTo(melon)
     turnTowards("West")
     for i =1,8 do
@@ -579,7 +571,7 @@ function glideMelon()
         turtle.dig()
     end
     goForward()
-
+    
     goForward()
     turnTowards("East")
     for i =1,8 do
@@ -625,8 +617,9 @@ while true do
     glideSugarCane()
     glidePumpkin()
     glideMelon()
-os.sleep(60)
+    os.sleep(60)
 end
+
 
 
 print"program end"
