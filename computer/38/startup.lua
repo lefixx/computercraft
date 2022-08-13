@@ -186,9 +186,8 @@ function resume()
 end
 
 function checkFuelAndRefuel()
-    print"-=-"
-    print("fuel :",turtle.getFuelLevel())
-    if turtle.getFuelLevel() <33265 then
+    reportFuel()
+    if turtle.getFuelLevel() <10000 then
         print("less than 10% fuel")
         saveCurrentState()
         moveTo(refuelingStation)
@@ -601,6 +600,15 @@ function glideSugarCane()
     emptyInv()
 end
 
+function reportFuel()
+
+    rednet.open("Left")
+    rednet.broadcast(turtle.getFuelLevel())
+    rednet.close("Left")
+
+end
+
+
 
 while true do 
     
@@ -623,6 +631,3 @@ end
 
 
 print"program end"
-
---todo add a computer that monitors fuel (progress bar maybe?)
-
