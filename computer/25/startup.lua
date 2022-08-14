@@ -1,19 +1,42 @@
 dyeDrawer = peripheral.wrap("storagedrawers:standard_drawers_1_22")
 hopper = peripheral.wrap("minecraft:hopper_4")
 
-while true do
-    turtle.place()
-    if dyeDrawer.list()[2] and dyeDrawer.list()[2].count < 100 then
-        hopper.pullItems("storagedrawers:standard_drawers_4_14",2,64)
-        os.sleep(30)
+
+function getBoneMeal()
+    local found = false
+    for i = 1,16 do
+        if turtle.getItemDetail(i) and turtle.getItemDetail(i).name == "minecraft:bone_meal" then
+            turtle.select(i)
+            found = true
+        end
     end
+    if found == false then 
+        hopper.pullItems("storagedrawers:standard_drawers_4_14",2,10)
+        os.sleep(1)
+        getBoneMeal()
+    end
+end
+
+function pushUp()
     for i = 1,16 do
         if turtle.getItemDetail(i) and turtle.getItemDetail(i).name == "minecraft:cocoa_beans" then
             turtle.select(i)
-            turtle.dropUp()
+            while turtle.getItemCount() ~= 0 do
+                turtle.dropUp()
+                os.sleep(0.5)
+            end
         end
     end
-    turtle.select(1)
+end
+
+
+while true do 
+    print("loop")
+    getBoneMeal()
+    turtle.place()
     turtle.suck()
-    -- turtle.suckDown()
+    pushUp()
+
+    os.sleep(0.5)
+
 end
