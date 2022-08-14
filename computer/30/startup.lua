@@ -122,16 +122,17 @@ function singularities()
             os.sleep(20)
         end
         local hasDye = false
-        for i,v in pairs(singularityBasin.list()) do
-            if v.name == "kubejs:dye_entangled_singularity" then
-                singularityBasin.pushItems("storagedrawers:standard_drawers_1_23",i)
-            elseif v.name == "minecraft:brown_dye" then
+        for i,v in pairs(singularityBasin.list()) do   -- look in the singularity basin
+            if v.name == "kubejs:dye_entangled_singularity" then --if there is chromatic singularity
+                singularityBasin.pushItems("storagedrawers:standard_drawers_1_23",i)  --push it to the grinder?
+            end
+            if v.name == "minecraft:brown_dye" then  --if it doesn't have dye in
                 hasDye = true
             end
         end
 
         if not hasDye then
-            singularityBasin.pullItems(peripheral.getName(dyeDrawer),2,64)
+            singularityBasin.pullItems(peripheral.getName(dyeDrawer),2,64) -- then push dye in it
         end
 
 
