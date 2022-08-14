@@ -118,7 +118,7 @@ function mainProccess()
 
 
         for k,v in pairs(chargers) do
-            if chargeBasin.list()[1] and chargeBasin.list()[1].name == "appliedenergistics2:certus_quartz_crystal" then
+            if chargeBasin and chargeBasin.list() and chargeBasin.list()[1] and chargeBasin.list()[1].name == "appliedenergistics2:certus_quartz_crystal" then
                 print("charging", v.pullItems(peripheral.getName(chargeBasin),1))
             end
             if chargeBasin.list()[10] and chargeBasin.list()[10].name == "appliedenergistics2:certus_quartz_crystal" then
