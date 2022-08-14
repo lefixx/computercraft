@@ -33,7 +33,10 @@ function claymaker()
             end
 
             --pull clay from strainer
-            if (not algalDrawer.list()[4] or algalDrawer.list()[4].count<=100) and (not washDepot.list()[1]) then   -- if clay is less that 100 pull sand and wash it
+            print(not algalDrawer.list()[5])
+
+            if (not algalDrawer.list()[5] or algalDrawer.list()[4].count<=100) and (not washDepot.list()[1]) then   -- if clay is less that 100 pull sand and wash it
+                print"-=-"
                 print("low on clay")
                 for i,v in pairs(strainer.list()) do
                     if v.count == 64 then
@@ -50,7 +53,7 @@ function claymaker()
 end
 
 function craftAlgalMix()
-    print"Crafting an algal mix"
+    -- print"Crafting an algal mix"
 
     -- if ((not algalDrawer.list()[2]) or algalDrawer.list()[2].count <= 100) and (algalDrawer.list()[5]) and algalDrawer.list()[5].count>=1 then
         basin.pullItems("storagedrawers:standard_drawers_4_4",2,1)
@@ -67,7 +70,7 @@ function craftAlgalMix()
 end
 
 function craftAndesiteAlloy()
-    print"Crafting andesite Alloy"
+    -- print"Crafting andesite Alloy"
     basin.pullItems(peripheral.getName(stoneDrawer),5,1)
     basin.pullItems("storagedrawers:standard_drawers_4_10",3,1)
     -- sleep(4.5)
