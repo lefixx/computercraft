@@ -1,6 +1,8 @@
 
 photo = peripheral.wrap("bottom")
 barrel = peripheral.wrap("top")
+drawer = peripheral.wrap("left")
+smelter = peripheral.wrap("right")
 
 function waitUntilPhotoIsEmpty()
     local finished = false
@@ -89,13 +91,22 @@ function countAndPushTallPoiseBush()
 end
 
 
+function moveSilver()
+    while true do
+        smelter.pullItems(peripheral.getName(drawer),2,1)
+        os.sleep(1)
+    end
+end
+
+
 function craftStuff()
     while true do
         craftTallPoiseBush(2)
         craftPoiseCluster(1)
         craftPoiseBush(1)
+        moveSilver()
     end
 end
 
 
-parallel.waitForAll(craftStuff,countAndPushTallPoiseBush)
+parallel.waitForAll(craftStuff,countAndPushTallPoiseBush,moveSilver)
