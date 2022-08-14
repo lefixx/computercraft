@@ -58,7 +58,7 @@ function craftPoiseBush(amount)
                 poiseClusterLocation = k
             end
         end
-        if not poiseClusterLocation then error"no poise cluster found" end
+        -- if not poiseClusterLocation then error"no poise cluster found" end
         photo.pullItems("top",poiseClusterLocation,1)
     end
     waitUntilPhotoIsEmpty()
