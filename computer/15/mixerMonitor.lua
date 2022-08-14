@@ -33,10 +33,7 @@ function claymaker()
             end
 
             --pull clay from strainer
-            print(not algalDrawer.list()[5])
-
             if (not algalDrawer.list()[5] or algalDrawer.list()[4].count<=100) and (not washDepot.list()[1]) then   -- if clay is less that 100 pull sand and wash it
-                print"-=-"
                 print("low on clay")
                 for i,v in pairs(strainer.list()) do
                     if v.count == 64 then
