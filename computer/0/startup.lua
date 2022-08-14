@@ -7,6 +7,7 @@ burnables = {"Cobblestone",
     "Fir Log",
     "Potato",
     "Raw Cod",
+    "Raw Cod Slice",
     "Oak Log",
     "Crushed Copper Ore",
     "Grout",
@@ -18,7 +19,9 @@ burnables = {"Cobblestone",
     "Raw Chicken",
     "Oak Log",
     "Raw Salmon",
+    "Raw Salmon Slice",
     "Raw Fish Fillet",
+    "Tin Can",
     "Coffee Beans"}
 
 
