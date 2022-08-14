@@ -17,12 +17,13 @@ burnables = {"Cobblestone",
     "Raw Porkchop",
     "Raw Chicken",
     "Oak Log",
+    "Raw Salmon",
     "Raw Fish Fillet",
     "Coffee Beans"}
 
 
 
-fuels = {"Coal", "Charcoal", "Stick", "Bowl", "Fir Sapling"}
+fuels = {"Coal", "Charcoal", "Stick", "Bowl", "Fir Sapling", "Bow"}
 
 function isFuel(item)
     for i,v in ipairs(fuels) do
