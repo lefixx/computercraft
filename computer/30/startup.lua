@@ -44,8 +44,6 @@ function debug(x)
     if true then print(x) end
 end
 
-
-
 function crystalBasinF()
     while true do
         for i,v in pairs(crystalBasin.list()) do
@@ -56,7 +54,6 @@ function crystalBasinF()
         os.sleep(2)
     end
 end
---
 
 function blastFurnaceF()
     while true do
@@ -105,6 +102,13 @@ function crusherF()
     end
 end
 
+function addDyeToSingularityBasin()
+    while true do
+        singularityBasin.pullItems(peripheral.getName(dyeDrawer),2)
+        os.sleep(0.5)
+    end
+end
+
 function singularities()
     while true do
         local count = 0
@@ -121,19 +125,6 @@ function singularities()
             turtleHopper.pullItems(peripheral.getName(gunpowderBlockDrawer),2,1)
             os.sleep(20)
         end
-        local hasDye = false
-        for i,v in pairs(singularityBasin.list()) do   -- look in the singularity basin
-            if v.name == "kubejs:dye_entangled_singularity" then --if there is chromatic singularity
-                singularityBasin.pushItems("storagedrawers:standard_drawers_1_23",i)  --push it to the grinder?
-            end
-            if v.name == "minecraft:brown_dye" then  --if it doesn't have dye in
-                hasDye = true
-            end
-        end
-
-        if not hasDye then
-            singularityBasin.pullItems(peripheral.getName(dyeDrawer),2,64) -- then push dye in it
-        end
 
 
         local hasSing = false
@@ -149,9 +140,7 @@ function singularities()
 
         if not hasSing then
             for z,v in pairs(singularityVacuum.list()) do
-                if hasDye and v.name == "appliedenergistics2:quantum_entangled_singularity" then
-                    singularityBasin.pullItems(peripheral.getName(singularityVacuum),z)
-                end
+                singularityBasin.pullItems(peripheral.getName(singularityVacuum),z)
             end
         end
 
@@ -159,6 +148,17 @@ function singularities()
     end
 end
 
+function pullChromaticSingularitiesFromBasin()
+    while true do
+        os.sleep(0,2)
+        for i,v in pairs(singularityBasin.list()) do   -- look in the singularity basin
+            if v.name == "kubejs:dye_entangled_singularity" then --if there is chromatic singularity
+                singularityBasin.pushItems("storagedrawers:standard_drawers_1_23",i)  --push it to the grinder?
+            end
+        end
+    end
+
+end
 
 function secondHopperIsEmpty()
     local boo = true
@@ -167,7 +167,6 @@ function secondHopperIsEmpty()
     end
     return boo
 end
-
 
 function paintballs()
     while true do
@@ -229,6 +228,8 @@ function craftMechanisms()
 end
 
 
+
+
 parallel.waitForAll(
     crystalBasinF,
     rediantSheets,
@@ -236,6 +237,8 @@ parallel.waitForAll(
     craftersF,
     crusherF,
     singularities,
+    addDyeToSingularityBasin,
     paintballs,
-    craftMechanisms
+    craftMechanisms,
+    pullChromaticSingularitiesFromBasin
 )
