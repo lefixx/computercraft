@@ -1,16 +1,32 @@
 redstone.setOutput("left",true)
 redstone.setOutput("right",true)
-chiller    = peripheral.wrap("thermal:machine_chiller_2")
-myself     = peripheral.wrap("turtle_6")
-crate      = peripheral.wrap("create:adjustable_crate_0")
-charger    = peripheral.wrap("thermal:charge_bench_0")
-drawers    = peripheral.wrap("storagedrawers:controller_1")
-pulveriser = peripheral.wrap("thermal:machine_pulverizer_1")
-basin      = peripheral.wrap("create:basin_24")
-igneous    = peripheral.wrap("thermal:device_rock_gen_0")
-igneous2   = peripheral.wrap("thermal:device_rock_gen_1")
-wheelsIn   = peripheral.wrap("create:smart_chute_3")
-wheelsOut  = peripheral.wrap("create:chute_6")
+chiller         = peripheral.wrap("thermal:machine_chiller_3")
+myself          = peripheral.wrap("turtle_6")
+crate           = peripheral.wrap("create:adjustable_crate_2")
+charger         = peripheral.wrap("thermal:charge_bench_1")
+drawers         = peripheral.wrap("storagedrawers:controller_2")
+pulveriser      = peripheral.wrap("thermal:machine_pulverizer_1")
+basin           = peripheral.wrap("create:basin_24")
+igneous         = peripheral.wrap("thermal:device_rock_gen_0")
+igneous2        = peripheral.wrap("thermal:device_rock_gen_1")
+wheelsIn        = peripheral.wrap("create:smart_chute_3")
+wheelsOut       = peripheral.wrap("create:chute_6")
+encapsulator    = peripheral.wrap("thermal:machine_bottler_0")
+drain           = peripheral.wrap("create:item_drain_2")
+drainInput      = peripheral.wrap("minecraft:hopper_7")
+drainOutput     = peripheral.wrap("create:chute_7")
+sandCell        = peripheral.wrap("thermal:fluid_cell_9")
+induction       = peripheral.wrap("thermal:machine_smelter_0")
+pyroliser       = peripheral.wrap("thermal:machine_pyrolyzer_0")
+charcoalDrawer  = peripheral.wrap("storagedrawers:standard_drawers_4_12")
+creosoteCell    = peripheral.wrap("thermal:fluid_cell_10")
+belt1           = peripheral.wrap("create:belt_3")
+coalChunksDepot = peripheral.wrap("create:depot_34")
+deployer        = peripheral.wrap("create:deployer_10")
+deployerDepot   = peripheral.wrap("create:depot_35")
+inductiveChest  = peripheral.wrap("storagedrawers:standard_drawers_1_31")
+
+
 
 
 function find(x)
@@ -53,10 +69,9 @@ function makeCatalyst(type)
 end
 
 function sendPulse()
-    redstone.setOutput("left",false)
-    os.sleep(0.5)
-    redstone.setOutput("left",true)
-
+    redstone.setOutput("right",false)
+    os.sleep(0.4)
+    redstone.setOutput("right",true)
 end
 
 function loadSnowBalls()
@@ -182,7 +197,8 @@ function pulveriserManager()
             craftBasalzPowder()
         end
         
-        if (not drawers.list()[findInDrawers("thermal:blizz_powder")]) then 
+        if drawers.list()[findInDrawers("thermal:blizz_powder")] then 
+            -- print"-=-"
             -- if (not drawers.list()[findInDrawers("thermal:blizz_powder")]) or drawers.list()[findInDrawers("thermal:blizz_powder").count < 1024] then
             craftBlizzPowder()
         end
@@ -190,48 +206,56 @@ function pulveriserManager()
 end
 
 function craftIceCharge()
-    if basin.list()[findInDrawers("thermal:blizz_powder")] then
+    -- if basin.list()[findInDrawers("thermal:blizz_powder")] then
         basin.pullItems(peripheral.getName(drawers),findInDrawers("thermal:blizz_powder"),8)
-    end
-    os.sleep(0.2)
-    
+    -- end
+    os.sleep(0.5)
+    drawers.pullItems(peripheral.getName(basin),10)
 end
 
 function craftEarthCharge()
-    
     basin.pullItems(peripheral.getName(drawers),findInDrawers("thermal:basalz_powder"),8)
-    os.sleep(0.2)
-    
+    os.sleep(0.5)
+    drawers.pullItems(peripheral.getName(basin),10)
 end
 
 function craftSandstone()
-
-    if (not drawers.list()[findInDrawers("minecraft:sand")]) or drawers.list()[findInDrawers("minecraft:sand")].count > 7 then
+        if (not drawers.list()[findInDrawers("minecraft:sand")]) or drawers.list()[findInDrawers("minecraft:sand")].count > 7 then
         basin.pullItems(peripheral.getName(drawers),findInDrawers("minecraft:sand"))
     end
-    
-    os.sleep(0.4)
+    os.sleep(0.5)
+end
 
+function craftSiliconCompound()
+    basin.pullItems(peripheral.getName(drawers),findInDrawers("kubejs:purified_sand"),1)
+    basin.pullItems(peripheral.getName(drawers),findInDrawers("kubejs:coke_chunk"),1)
+    basin.pullFluid(peripheral.getName(sandCell),500)
+    os.sleep(0.5)
+    drawers.pullItems(peripheral.getName(basin),10)
 end
 
 function pressManager()
-    while true do os.sleep(1)
-
-        if (drawers.list()[findInDrawers"minecraft:sand"].count > 4) and (drawers.list()[findInDrawers"minecraft:sandstone"].count < 512) then
+    for i,v in pairs(basin.list()) do
+        drawers.pullItems(peripheral.getName(basin),i)
+    end
+    while true do os.sleep(0.2)
+        if (findInDrawers("minecraft:sand") and drawers.list()[findInDrawers"minecraft:sand"].count > 4) and (drawers.list()[findInDrawers"minecraft:sandstone"].count < 512) then
             craftSandstone()
-        end
-
-        if (drawers.list()[findInDrawers"thermal:basalz_powder"].count > 8) and (drawers.list()[findInDrawers"thermal:earth_charge"].count < 512) then
+        elseif (drawers.list()[findInDrawers"thermal:basalz_powder"].count > 8) and (drawers.list()[findInDrawers"thermal:earth_charge"].count < 512) then
             craftEarthCharge()
-        end
-
-        if (drawers.list()[findInDrawers"thermal:blizz_powder"].count > 8) and (drawers.list()[findInDrawers"thermal:ice_charge"].count < 512) then
+        elseif (drawers.list()[findInDrawers"thermal:blizz_powder"].count > 8) and (drawers.list()[findInDrawers"thermal:ice_charge"].count < 512) then
             craftIceCharge()
+        elseif findInDrawers("kubejs:purified_sand") ~= nil then
+            if (findInDrawers("kubejs:coke_chunk")~= nil) and findInDrawers("kubejs:coke_chunk") > 0 then 
+                if (not findInDrawers("kubejs:silicon_compound")) then
+                    print(not findInDrawers("kubejs:silicon_compound"))  --have silicon_compound
+                    -- if drawers.list()[findInDrawers("kubejs:silicon_compound")].count < 512 then 
+                        craftSiliconCompound()
+                    -- end
+                end
+            end
         end
 
-        for i,v in pairs(basin.list()) do
-            drawers.pullItems(peripheral.getName(basin),10)
-        end
     end
 end
 
@@ -252,7 +276,7 @@ function IngneousManager()
 
     while true do os.sleep(20)
         if drawers.list()[findInDrawers("minecraft:basalt")].count < 1024 then
-            drawers.pullItems(peripheral.getName(igneous),findInDrawers("minecraft:basalt"))
+            drawers.pullItems(peripheral.getName(igneous),1)
         end
     end
 
@@ -284,8 +308,11 @@ function wheelInPutManager()
 end
 
 function igneous2Manager()
-    while true do os.sleep(10)
-        drawers.pullItems(peripheral.getName(igneous2),1)
+    while true do
+        if (not drawers.list()[findInDrawers("minecraft:cobblestone")])or drawers.list()[findInDrawers("minecraft:cobblestone")].count < 1024 then
+            drawers.pullItems(peripheral.getName(igneous2),1)
+        end
+        os.sleep(10)
     end
 end
 
@@ -297,9 +324,180 @@ function makeSand()
     wheelsIn.pullItems(peripheral.getName(drawers),findInDrawers("minecraft:gravel"))
 end
 
+function encapsulatorManager()
+    while true do os.sleep(0.5)
+        if (not drawers.list()[findInDrawers("kubejs:sand_ball")]) or drawers.list()[findInDrawers("kubejs:sand_ball")].count < 128 then
+            if drawers.list()[findInDrawers("minecraft:sand")].count > 1 then
+                encapsulator.pushItems(peripheral.getName(drawers),1)
+                encapsulator.pushItems(peripheral.getName(drawers),2)
+                encapsulator.pullItems(peripheral.getName(drawers),findInDrawers("minecraft:sand"),1)
+                os.sleep(1)
+                encapsulator.pushItems(peripheral.getName(drawers),1)
+                encapsulator.pushItems(peripheral.getName(drawers),2)
+            end
+        end
+    end
+end
+
+function drainManager()
+    while true do os.sleep(1) 
+        if (not drawers.list()[findInDrawers("kubejs:rough_sand")]) or drawers.list()[findInDrawers("kubejs:rough_sand")].count < 256 then
+            if (not not drawers.list()[findInDrawers("kubejs:sand_ball")]) then
+                drainInput.pullItems(peripheral.getName(drawers),findInDrawers("kubejs:sand_ball"))
+            end
+        end
+        drain.pushFluid(peripheral.getName(sandCell))
+    end
+end
+
+function drainOutputManager()
+    while true do os.sleep(0.2)
+        drainOutput.pushItems(peripheral.getName(drawers),1)
+    end
+end
+
+function craftPurifiedSand()
+    induction.pullItems(peripheral.getName(drawers),findInDrawers("thermal:earth_charge"),1)
+    induction.pullItems(peripheral.getName(drawers),findInDrawers("kubejs:rough_sand"),1)
+    while not induction.list()[5] do
+        os.sleep(0.1)
+    end
+    induction.pushItems(peripheral.getName(drawers),5)
+
+end
+
+function craftSilicon()
+    induction.pullItems(peripheral.getName(drawers),findInDrawers("thermal:ice_charge"),1)
+    induction.pullItems(peripheral.getName(drawers),findInDrawers("kubejs:silicon_compound"),1)
+while not induction.list()[5] do
+        os.sleep(0.1)
+    end
+    induction.pushItems(peripheral.getName(drawers),5)
+end
+
+function inductionSmelterManager()
+
+    for i,v in pairs(induction.list()) do
+        drawers.pullItems(peripheral.getName(induction),i)
+    end
+
+    while true do os.sleep(0.5)
+        if ((not drawers.list()[findInDrawers("appliedenergistics2:silicon")]) or drawers.list()[findInDrawers("appliedenergistics2:silicon")].count < 256)  and drawers.list()[findInDrawers("kubejs:silicon_compound")]then
+            craftSilicon()
+        elseif (not drawers.list()[findInDrawers("kubejs:purified_sand")]) or drawers.list()[findInDrawers("kubejs:purified_sand")].count < 256 and findInDrawers("kubejs:rough_sand") then
+            craftPurifiedSand()
+        end
+    end
+end
+
+function pyroliserManager()
+
+    while true do os.sleep(1)
+
+        charcoalDrawer.pushItems(peripheral.getName(pyroliser),3,1)
+        os.sleep(5.4)
+        pyroliser.pushItems(peripheral.getName(drawers),2)
+        pyroliser.pushFluid(peripheral.getName(creosoteCell))
+        
+    end
+
+end
+
+function cokeDepotManager()
+    while true do os.sleep(0.5)
+        if drawers.list()[findInDrawers("thermal:coal_coke")] then
+            if (not drawers.list()[findInDrawers("kubejs:coke_chuck")] or drawers.list()[findInDrawers("kubejs:coke_chuck")].count < 256 ) then
+                cokeDepot.pullItems(peripheral.getName(drawers),findInDrawers("thermal:coal_coke"),1)
+                os.sleep(5)
+                cokeDepot.pushItems(peripheral.getName(drawers),10)
+            end
+        end
+    end
+end
+
+function coalManager()
+    while true do os.sleep(1)
+        if (not drawers.list()[findInDrawers("kubejs:coke_chunk")]) or drawers.list()[findInDrawers("kubejs:coke_chunk")].count < 256 then
+            if drawers.list()[findInDrawers("thermal:coal_coke")] then
+                belt1.pullItems(peripheral.getName(drawers),findInDrawers("thermal:coal_coke"),1)
+                coalChunksDepot.pushItems(peripheral.getName(drawers),1)
+            end
+        end
+    end
+end
+
+function deployerEquip(item)
+    deployer.pullItems(peripheral.getName(drawers),findInDrawers(item),1)
+end
+
+function deployerLoad(item)
+    deployerDepot.pullItems(peripheral.getName(drawers),findInDrawers(item),1)
+end
+
+function deployerClear()
+    for i,v in pairs(deployerDepot.list()) do
+        drawers.pullItems(peripheral.getName(deployerDepot),i)
+    end
+    deployer.pushItems(peripheral.getName(drawers),1)
+end
+
+function craftPrintedSilicon()
+    deployerClear()
+    deployerEquip("appliedenergistics2:silicon_press")
+    deployerLoad("appliedenergistics2:silicon")
+    os.sleep(1)
+    deployerDepot.pushItems(peripheral.getName(drawers),1)
+    deployerClear()
+
+end
+
+function craftCalculationMechanism()
+    deployerClear()
+    deployerDepot.pullItems(peripheral.getName(inductiveChest),2,1)
+
+    deployerEquip("appliedenergistics2:printed_silicon")
+    deployerEquip("appliedenergistics2:printed_silicon")
+
+    os.sleep(1)
+    deployerEquip("kubejs:flash_drive")
+    os.sleep(0.5)
+    deployerClear()
+end
+
+function deployerManager()
+    deployerClear()
+    while true do os.sleep(1)
 
 
-craftSandstone()
-parallel.waitForAll(laserManager,craftSnowballs,pulveriserManager,pressManager,IngneousManager,wheelOutPutManager,igneous2Manager,wheelInPutManager)
 
+        if (not findInDrawers("appliedenergistics2:printed_silicon")) or (drawers.list()[findInDrawers("appliedenergistics2:printed_silicon")].count < 512) then  
+            if drawers.list()[findInDrawers("appliedenergistics2:silicon")] then
+                craftPrintedSilicon()
+            end
+        end
+
+
+
+
+        if (not findInDrawers("kubejs:calculation_mechanism")) or drawers.list()[findInDrawers("kubejs:calculation_mechanism")].count < 1024 then
+            if findInDrawers("appliedenergistics2:printed_silicon") and drawers.list()[findInDrawers("appliedenergistics2:printed_silicon")].count > 1 then
+                craftCalculationMechanism()
+            end
+        end
+
+    end
+end
+
+
+
+
+-- sendPulse()
+
+parallel.waitForAll(
+    pressManager,
+    laserManager,craftSnowballs,pulveriserManager,
+    IngneousManager,wheelOutPutManager,igneous2Manager,wheelInPutManager,encapsulatorManager,
+    drainManager,drainOutputManager,inductionSmelterManager, pyroliserManager,coalManager,
+    deployerManager
+)
 
