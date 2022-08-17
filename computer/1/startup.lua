@@ -296,7 +296,6 @@ function pressManager2()
     end
 end
 
-
 function haveEnough(item,min,max)
     
     local slot,count  = findInDrawers(item)
@@ -312,7 +311,6 @@ function haveEnough(item,min,max)
         if count < max then return false end
     end
 end
-
 
 function laserManager()
     while true do os.sleep(1)
@@ -525,10 +523,11 @@ function deployerManager()
 
 
 
-        if (not findInDrawers("appliedenergistics2:printed_silicon")) or (drawers.list()[findInDrawers("appliedenergistics2:printed_silicon")].count < 512) then  
-            if drawers.list()[findInDrawers("appliedenergistics2:silicon")] then
+        -- if (not findInDrawers("appliedenergistics2:printed_silicon")) or (drawers.list()[findInDrawers("appliedenergistics2:printed_silicon")].count < 512) then  
+        if not haveEnough("appliedenergistics2:printed_silicon",512,512) and haveEnough("appliedenergistics2:silicon",5,512) then
+            -- if drawers.list()[findInDrawers("appliedenergistics2:silicon")] then
                 craftPrintedSilicon()
-            end
+            -- end
         end
 
 
@@ -543,9 +542,17 @@ function deployerManager()
     end
 end
 
+function status()
+
+    while true do os.sleep(1)
+        redstone.setOutput("bottom",true)
+        os.sleep(0.1)
+        redstone.setOutput("bottom",false)
+    end
 
 
--- pressManager2()
+end
+
 
 parallel.waitForAll(
     pressManager,
@@ -553,6 +560,7 @@ parallel.waitForAll(
     laserManager,craftSnowballs,pulveriserManager,
     IngneousManager,wheelOutPutManager,igneous2Manager,wheelInPutManager,encapsulatorManager,
     drainManager,drainOutputManager,inductionSmelterManager, pyroliserManager,coalManager,
-    deployerManager
+    deployerManager,
+    status
 )
 
