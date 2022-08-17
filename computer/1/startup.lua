@@ -7,6 +7,7 @@ charger         = peripheral.wrap("thermal:charge_bench_1")
 drawers         = peripheral.wrap("storagedrawers:controller_2")
 pulveriser      = peripheral.wrap("thermal:machine_pulverizer_1")
 basin           = peripheral.wrap("create:basin_24")
+basin2          = peripheral.wrap("create:basin_25")
 igneous         = peripheral.wrap("thermal:device_rock_gen_0")
 igneous2        = peripheral.wrap("thermal:device_rock_gen_1")
 wheelsIn        = peripheral.wrap("create:smart_chute_3")
@@ -231,20 +232,65 @@ function pressManager()
     for i,v in pairs(basin.list()) do
         drawers.pullItems(peripheral.getName(basin),i)
     end
-    while true do os.sleep(0.2)
+    while true do os.sleep(0.1)
         if (drawers.list()[findInDrawers"thermal:basalz_powder"].count > 8) and (drawers.list()[findInDrawers"thermal:earth_charge"].count < 512) then
             craftEarthCharge()
         elseif (drawers.list()[findInDrawers"thermal:blizz_powder"].count > 8) and (drawers.list()[findInDrawers"thermal:ice_charge"].count < 512) then
             craftIceCharge()
         elseif findInDrawers("kubejs:purified_sand") ~= nil then
-            if (findInDrawers("kubejs:coke_chunk")~= nil) and findInDrawers("kubejs:coke_chunk") > 0 then 
-                if (not findInDrawers("kubejs:silicon_compound")) then
-                    print(not findInDrawers("kubejs:silicon_compound"))  --have silicon_compound
+            -- if (findInDrawers("kubejs:coke_chunk")~= nil) and findInDrawers("kubejs:coke_chunk") > 0 then 
+                -- if (not findInDrawers("kubejs:silicon_compound")) then
+                    -- print(not findInDrawers("kubejs:silicon_compound"))  --have silicon_compound
                     -- if drawers.list()[findInDrawers("kubejs:silicon_compound")].count < 512 then 
                         craftSiliconCompound()
                     -- end
-                end
-            end
+                -- end
+            -- end
+        end
+
+    end
+end
+
+function craftIceCharge2()
+    -- if basin.list()[findInDrawers("thermal:blizz_powder")] then
+        basin2.pullItems(peripheral.getName(drawers),findInDrawers("thermal:blizz_powder"),8)
+    -- end
+    os.sleep(0.5)
+    drawers.pullItems(peripheral.getName(basin2),10)
+end
+
+function craftEarthCharge2()
+    basin2.pullItems(peripheral.getName(drawers),findInDrawers("thermal:basalz_powder"),8)
+    os.sleep(0.5)
+    drawers.pullItems(peripheral.getName(basin2),10)
+end
+
+function craftSiliconCompound2()
+    basin2.pullItems(peripheral.getName(drawers),findInDrawers("kubejs:purified_sand"),1)
+    basin2.pullItems(peripheral.getName(drawers),findInDrawers("kubejs:coke_chunk"),1)
+    basin2.pullFluid(peripheral.getName(sandCell),500)
+    os.sleep(0.5)
+    drawers.pullItems(peripheral.getName(basin2),10)
+end
+
+function pressManager2()
+    for i,v in pairs(basin2.list()) do
+        drawers.pullItems(peripheral.getName(basin2),i)
+    end
+    while true do os.sleep(0.1)
+        if (drawers.list()[findInDrawers"thermal:basalz_powder"].count > 8) and (drawers.list()[findInDrawers"thermal:earth_charge"].count < 512) then
+            craftEarthCharge2()
+        elseif (drawers.list()[findInDrawers"thermal:blizz_powder"].count > 8) and (drawers.list()[findInDrawers"thermal:ice_charge"].count < 512) then
+            craftIceCharge2()
+        elseif findInDrawers("kubejs:purified_sand") ~= nil then
+            -- if (findInDrawers("kubejs:coke_chunk")~= nil) and findInDrawers("kubejs:coke_chunk") > 0 then 
+                -- if (not findInDrawers("kubejs:silicon_compound")) then
+                    -- print(not findInDrawers("kubejs:silicon_compound"))  --have silicon_compound
+                    -- if drawers.list()[findInDrawers("kubejs:silicon_compound")].count < 512 then 
+                        craftSiliconCompound2()
+                    -- end
+                -- end
+            -- end
         end
 
     end
@@ -360,7 +406,7 @@ end
 function craftSilicon()
     induction.pullItems(peripheral.getName(drawers),findInDrawers("thermal:ice_charge"),1)
     induction.pullItems(peripheral.getName(drawers),findInDrawers("kubejs:silicon_compound"),1)
-while not induction.list()[5] do
+    while not induction.list()[5] do
         os.sleep(0.1)
     end
     induction.pushItems(peripheral.getName(drawers),5)
@@ -372,7 +418,7 @@ function inductionSmelterManager()
         drawers.pullItems(peripheral.getName(induction),i)
     end
 
-    while true do os.sleep(0.5)
+    while true do os.sleep(0.2)
         if ((not drawers.list()[findInDrawers("appliedenergistics2:silicon")]) or drawers.list()[findInDrawers("appliedenergistics2:silicon")].count < 256)  and drawers.list()[findInDrawers("kubejs:silicon_compound")]then
             craftSilicon()
         elseif (not drawers.list()[findInDrawers("kubejs:purified_sand")]) or drawers.list()[findInDrawers("kubejs:purified_sand")].count < 256 and findInDrawers("kubejs:rough_sand") then
@@ -449,7 +495,7 @@ function craftCalculationMechanism()
     deployerEquip("appliedenergistics2:printed_silicon")
     deployerEquip("appliedenergistics2:printed_silicon")
 
-    os.sleep(1)
+    os.sleep(0.7)
     deployerEquip("kubejs:flash_drive")
     os.sleep(0.5)
     deployerClear()
@@ -479,13 +525,9 @@ function deployerManager()
     end
 end
 
-
-
-
--- sendPulse()
-
 parallel.waitForAll(
     pressManager,
+    pressManager2,
     laserManager,craftSnowballs,pulveriserManager,
     IngneousManager,wheelOutPutManager,igneous2Manager,wheelInPutManager,encapsulatorManager,
     drainManager,drainOutputManager,inductionSmelterManager, pyroliserManager,coalManager,
