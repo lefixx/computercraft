@@ -219,13 +219,6 @@ function craftEarthCharge()
     drawers.pullItems(peripheral.getName(basin),10)
 end
 
-function craftSandstone()
-        if (not drawers.list()[findInDrawers("minecraft:sand")]) or drawers.list()[findInDrawers("minecraft:sand")].count > 7 then
-        basin.pullItems(peripheral.getName(drawers),findInDrawers("minecraft:sand"))
-    end
-    os.sleep(0.5)
-end
-
 function craftSiliconCompound()
     basin.pullItems(peripheral.getName(drawers),findInDrawers("kubejs:purified_sand"),1)
     basin.pullItems(peripheral.getName(drawers),findInDrawers("kubejs:coke_chunk"),1)
@@ -239,9 +232,7 @@ function pressManager()
         drawers.pullItems(peripheral.getName(basin),i)
     end
     while true do os.sleep(0.2)
-        if (findInDrawers("minecraft:sand") and drawers.list()[findInDrawers"minecraft:sand"].count > 4) and (drawers.list()[findInDrawers"minecraft:sandstone"].count < 512) then
-            craftSandstone()
-        elseif (drawers.list()[findInDrawers"thermal:basalz_powder"].count > 8) and (drawers.list()[findInDrawers"thermal:earth_charge"].count < 512) then
+        if (drawers.list()[findInDrawers"thermal:basalz_powder"].count > 8) and (drawers.list()[findInDrawers"thermal:earth_charge"].count < 512) then
             craftEarthCharge()
         elseif (drawers.list()[findInDrawers"thermal:blizz_powder"].count > 8) and (drawers.list()[findInDrawers"thermal:ice_charge"].count < 512) then
             craftIceCharge()
