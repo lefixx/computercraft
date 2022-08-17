@@ -42,7 +42,7 @@ end
 function findInDrawers(name)
     for i,v in pairs(drawers.list()) do
         if v.name == name then
-            return i
+            return i, v.count
         end
     end
 end
@@ -278,23 +278,41 @@ function pressManager2()
         drawers.pullItems(peripheral.getName(basin2),i)
     end
     while true do os.sleep(0.1)
+
+
         if (drawers.list()[findInDrawers"thermal:basalz_powder"].count > 8) and (drawers.list()[findInDrawers"thermal:earth_charge"].count < 512) then
             craftEarthCharge2()
         elseif (drawers.list()[findInDrawers"thermal:blizz_powder"].count > 8) and (drawers.list()[findInDrawers"thermal:ice_charge"].count < 512) then
             craftIceCharge2()
-        elseif findInDrawers("kubejs:purified_sand") ~= nil then
-            -- if (findInDrawers("kubejs:coke_chunk")~= nil) and findInDrawers("kubejs:coke_chunk") > 0 then 
-                -- if (not findInDrawers("kubejs:silicon_compound")) then
-                    -- print(not findInDrawers("kubejs:silicon_compound"))  --have silicon_compound
-                    -- if drawers.list()[findInDrawers("kubejs:silicon_compound")].count < 512 then 
-                        craftSiliconCompound2()
-                    -- end
-                -- end
-            -- end
-        end
 
+        elseif not haveEnough("kubejs:silicon_compound",256,512) and haveEnough("kubejs:purified_sand",48,512) then
+            
+            
+            craftSiliconCompound2()
+            
+        
+            
+        end
     end
 end
+
+
+function haveEnough(item,min,max)
+    
+    local slot,count  = findInDrawers(item)
+    
+        print(slot)
+        print(count)
+
+    if not slot then 
+        return false
+    else
+        if count > max then return true end
+        if count > min then return false end
+        if count < max then return false end
+    end
+end
+
 
 function laserManager()
     while true do os.sleep(1)
@@ -421,7 +439,7 @@ function inductionSmelterManager()
     while true do os.sleep(0.2)
         if ((not drawers.list()[findInDrawers("appliedenergistics2:silicon")]) or drawers.list()[findInDrawers("appliedenergistics2:silicon")].count < 256)  and drawers.list()[findInDrawers("kubejs:silicon_compound")]then
             craftSilicon()
-        elseif (not drawers.list()[findInDrawers("kubejs:purified_sand")]) or drawers.list()[findInDrawers("kubejs:purified_sand")].count < 256 and findInDrawers("kubejs:rough_sand") then
+        elseif not haveEnough("kubejs:purified_sand",512,512) then
             craftPurifiedSand()
         end
     end
@@ -524,6 +542,10 @@ function deployerManager()
 
     end
 end
+
+
+
+-- pressManager2()
 
 parallel.waitForAll(
     pressManager,
