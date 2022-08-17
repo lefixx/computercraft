@@ -48,17 +48,22 @@ function crystalBasinF()
     while true do
         for i,v in pairs(crystalBasin.list()) do
             if v.name == crystal then
-                blastFurnace.pullItems(crystalBasinS,i,64,1)
+                blastFurnace.pullItems(crystalBasinS,i,64)
+                os.sleep(0.5)
+                blastFurnace.pushItems(crystalBasinS,3)
+                -- blastFurnace.pushItems(crystalBasinS,2)
+                blastFurnace.pushItems(crystalBasinS,1)
             end
         end
         os.sleep(2)
+
     end
 end
 
 function blastFurnaceF()
     while true do
             blastFurnace.pushItems(crystalBasinS,3,64)
-            blastFurnace.pullItems("storagedrawers:standard_drawers_4_11",3)
+            blastFurnace.pullItems("storagedrawers:standard_drawers_4_11",3,32,2)
         os.sleep(10)
     end
 end
