@@ -175,7 +175,14 @@ end
 
 function paintballs()
     while true do
-        if crusherOutput.list()[1] and string.sub(crusherOutput.list()[1].name,-4)=="ball" then
+
+        local foo = crusherOutput.list()[1]
+
+        if foo then 
+            bar = string.sub(foo.name,-4)=="ball"
+        end
+
+        if foo and bar then
             debug(crusherOutput.pushItems("storagedrawers:controller_slave_1",1))
         end
 
