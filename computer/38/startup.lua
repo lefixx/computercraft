@@ -15,6 +15,10 @@ pumpkin         =  {4312, 67, -2829, "West"}
 melon            = {4312, 67, -2825, "West"}
 sugarCane        = {4312, 67, -2831, "West"}
 
+--TODO move pumkins and mellons one layer down
+
+
+
 function writeLocationToFile()
     local x,y,z = gps.locate()
     loc = fs.open("loc","w")

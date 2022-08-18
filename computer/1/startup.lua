@@ -180,27 +180,29 @@ end
 
 function craftBlizzPowder()
     clearPulveriser()   
-    pulveriser.pullItems(peripheral.getName(drawers),findInDrawers("thermal:blizz_rod"),10)
-    os.sleep(5.5)
+    pulveriser.pullItems(peripheral.getName(drawers),findInDrawers("thermal:blizz_rod"),20)
+    while pulveriser.list()[1] do
+        os.sleep(0.2)
+    end
     clearPulveriser()
 end
 
 function craftBasalzPowder()
     clearPulveriser()
-    pulveriser.pullItems(peripheral.getName(drawers),findInDrawers("thermal:basalz_rod"),10)
-    os.sleep(5.5)
+    pulveriser.pullItems(peripheral.getName(drawers),findInDrawers("thermal:basalz_rod"),20)
+    while pulveriser.list()[1] do
+        os.sleep(0.2)
+    end
     clearPulveriser()
 end
 
 function pulveriserManager()
     while true do os.sleep(1)
-        if (not drawers.list()[findInDrawers("thermal:basalz_powder")])   or drawers.list()[findInDrawers("thermal:basalz_powder")].count < 1024    then
-            craftBasalzPowder()
+        if haveEnough("thermal:basalz_rod",1024,1024)  and not haveEnough("thermal:basalz_powder",1024,2048)  then
+            -- craftBasalzPowder()
         end
         
-        if drawers.list()[findInDrawers("thermal:blizz_powder")] then 
-            -- print"-=-"
-            -- if (not drawers.list()[findInDrawers("thermal:blizz_powder")]) or drawers.list()[findInDrawers("thermal:blizz_powder").count < 1024] then
+        if not haveEnough("thermal:blizz_powder",1024,1500) and haveEnough("thermal:blizz_rod",512,512) then 
             craftBlizzPowder()
         end
     end
@@ -232,22 +234,14 @@ function pressManager()
     for i,v in pairs(basin.list()) do
         drawers.pullItems(peripheral.getName(basin),i)
     end
-    while true do os.sleep(0.1)
-        if (drawers.list()[findInDrawers"thermal:basalz_powder"].count > 8) and (drawers.list()[findInDrawers"thermal:earth_charge"].count < 512) then
+    while true do os.sleep(1)
+        if haveEnough("thermal:basalz_powder",10,10) and not haveEnough("thermal:earth_charge",1024,1500) then
             craftEarthCharge()
         elseif (drawers.list()[findInDrawers"thermal:blizz_powder"].count > 8) and (drawers.list()[findInDrawers"thermal:ice_charge"].count < 512) then
             craftIceCharge()
-        elseif findInDrawers("kubejs:purified_sand") ~= nil then
-            -- if (findInDrawers("kubejs:coke_chunk")~= nil) and findInDrawers("kubejs:coke_chunk") > 0 then 
-                -- if (not findInDrawers("kubejs:silicon_compound")) then
-                    -- print(not findInDrawers("kubejs:silicon_compound"))  --have silicon_compound
-                    -- if drawers.list()[findInDrawers("kubejs:silicon_compound")].count < 512 then 
-                        craftSiliconCompound()
-                    -- end
-                -- end
-            -- end
+        elseif (haveEnough("kubejs:coke_chunk",2,2)) and (not haveEnough("kubejs:silicon_compound",512,1024)) and haveEnough("kubejs:purified_sand", 64,64) then
+            craftSiliconCompound()
         end
-
     end
 end
 
@@ -279,20 +273,14 @@ function pressManager2()
     end
     while true do os.sleep(0.1)
 
-
-        if (drawers.list()[findInDrawers"thermal:basalz_powder"].count > 8) and (drawers.list()[findInDrawers"thermal:earth_charge"].count < 512) then
+        if haveEnough("thermal:basalz_powder",40,40) and not haveEnough("thermal:earth_charge",512,512) then
             craftEarthCharge2()
         elseif (drawers.list()[findInDrawers"thermal:blizz_powder"].count > 8) and (drawers.list()[findInDrawers"thermal:ice_charge"].count < 512) then
             craftIceCharge2()
-
-        elseif not haveEnough("kubejs:silicon_compound",256,512) and haveEnough("kubejs:purified_sand",48,512) then
-            
-            
+        elseif (haveEnough("kubejs:coke_chunk",2,2)) and (not haveEnough("kubejs:silicon_compound",512,1024)) and haveEnough("kubejs:purified_sand", 64,64) then
             craftSiliconCompound2()
-            
-        
-            
         end
+            
     end
 end
 
@@ -300,9 +288,6 @@ function haveEnough(item,min,max)
     
     local slot,count  = findInDrawers(item)
     
-        print(slot)
-        print(count)
-
     if not slot then 
         return false
     else
@@ -315,11 +300,13 @@ end
 function laserManager()
     while true do os.sleep(1)
         
-        if drawers.list()[findInDrawers("thermal:blizz_rod")].count <1024 then
+        if not haveEnough("thermal:blizz_rod",1024,1024) then
+        -- if drawers.list()[findInDrawers("thermal:blizz_rod")].count <1024 then
             craftBlizz()
         end
         
-        if drawers.list()[findInDrawers("thermal:basalz_rod")].count <1024 then
+        -- if drawers.list()[findInDrawers("thermal:basalz_rod")].count <1024 then
+        if not haveEnough("thermal:basalz_rod",1024,2048) and haveEnough("minecraft:basalt",64,64) then
             craftBasalzShard()
         end
     end
@@ -328,7 +315,9 @@ end
 function IngneousManager()
 
     while true do os.sleep(20)
-        if drawers.list()[findInDrawers("minecraft:basalt")].count < 1024 then
+        -- if drawers.list()[findInDrawers("minecraft:basalt")].count < 1024 then
+        
+        if not haveEnough("minecraft:basalt",1024,2048) then
             drawers.pullItems(peripheral.getName(igneous),1)
         end
     end
@@ -444,11 +433,13 @@ function inductionSmelterManager()
 end
 
 function pyroliserManager()
-
     while true do os.sleep(1)
+        charcoalDrawer.pushItems(peripheral.getName(pyroliser),3,10)
 
-        charcoalDrawer.pushItems(peripheral.getName(pyroliser),3,1)
-        os.sleep(5.4)
+        while pyroliser.list()[1] do 
+            os.sleep(0.2)
+        end
+
         pyroliser.pushItems(peripheral.getName(drawers),2)
         pyroliser.pushFluid(peripheral.getName(creosoteCell))
         
@@ -524,16 +515,11 @@ function deployerManager()
 
 
         -- if (not findInDrawers("appliedenergistics2:printed_silicon")) or (drawers.list()[findInDrawers("appliedenergistics2:printed_silicon")].count < 512) then  
-        if not haveEnough("appliedenergistics2:printed_silicon",512,512) and haveEnough("appliedenergistics2:silicon",5,512) then
+        if not haveEnough("appliedenergistics2:printed_silicon",512,512) and haveEnough("appliedenergistics2:silicon",5,10) then
             -- if drawers.list()[findInDrawers("appliedenergistics2:silicon")] then
                 craftPrintedSilicon()
             -- end
-        end
-
-
-
-
-        if (not findInDrawers("kubejs:calculation_mechanism")) or drawers.list()[findInDrawers("kubejs:calculation_mechanism")].count < 1024 then
+        elseif (not findInDrawers("kubejs:calculation_mechanism")) or drawers.list()[findInDrawers("kubejs:calculation_mechanism")].count < 1024 then
             if findInDrawers("appliedenergistics2:printed_silicon") and drawers.list()[findInDrawers("appliedenergistics2:printed_silicon")].count > 1 then
                 craftCalculationMechanism()
             end

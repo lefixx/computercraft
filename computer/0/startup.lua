@@ -26,7 +26,7 @@ burnables = {"Cobblestone",
 
 
 
-fuels = {"Coal", "Charcoal", "Stick", "Bowl", "Fir Sapling", "Bow"}
+fuels = {"Coal", "Charcoal", "Stick", "Bowl", "Fir Sapling", "Bow", "Crossbow"}
 
 function isFuel(item)
     for i,v in ipairs(fuels) do

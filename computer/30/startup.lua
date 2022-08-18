@@ -26,11 +26,13 @@ mechanismDepot = peripheral.wrap("create:depot_30")
 magnetDepot = peripheral.wrap("create:depot_31")
 precisionDrawer = peripheral.wrap("storagedrawers:standard_drawers_1_12")
 mechanismDeployer = peripheral.wrap("create:deployer_9")
-inductiveDrawer = peripheral.wrap("enderstorage:ender_chest_0")
+inductiveDrawer = peripheral.wrap("storagedrawers:standard_drawers_1_31")
 paintballDrawers = peripheral.wrap("storagedrawers:controller_0")
 radiantInductionCoilDrawer = peripheral.wrap("storagedrawers:standard_drawers_1_25")
 radiantCrafter = peripheral.wrap("create:mechanical_crafter_17")
 crystalBasinS = peripheral.getName(crystalBasin)
+
+nextStageDrawers = peripheral.wrap("storagedrawers:controller_2")
 
 
 green = "appliedenergistics2:green_paint_ball"
@@ -41,7 +43,7 @@ yellow = "appliedenergistics2:yellow_paint_ball"
 
 
 function debug(x)
-    if true then print(x) end
+    if false then print(x) end
 end
 
 function crystalBasinF()
@@ -71,11 +73,27 @@ end
 function craftersF()
     while true do
         crafterSticks.pullItems("storagedrawers:standard_drawers_4_15",4,5)
-        if not gunpowderBlockDrawer.list()[2] or (gunpowderBlockDrawer.list(2) and gunpowderBlockDrawer.list()[2].count < 200) then
-            print"here"
-            crafterGun.pullItems("storagedrawers:standard_drawers_4_14",3,9)
+        
+        
+        local amount,slot
+        for i,v in pairs(nextStageDrawers.list()) do 
+            if v.name == "minecraft:cobblestone" then
+                slot = i
+                amount = v.count
+            end
         end
-        os.sleep(1)
+        
+        if amount and amount > 512 then
+            
+            crafterCobble.pullItems(peripheral.getName(nextStageDrawers), slot,16)
+            
+            
+            
+            if not gunpowderBlockDrawer.list()[2] or (gunpowderBlockDrawer.list(2) and gunpowderBlockDrawer.list()[2].count < 200) then
+                crafterGun.pullItems("storagedrawers:standard_drawers_4_14",3,9)
+            end
+            os.sleep(0.5)
+        end
     end
 end
 
@@ -83,18 +101,18 @@ function crusherF()
     while true do
         local foo = crusherOutput.list()[1]
         if (not crusherInput.list()[1]) and (not foo) then
-            if (not singularityDrawer.list()[2]) or (singularityDrawer.list()[2].count < 64) then
+            if (singularityDrawer.list()[2]) and (singularityDrawer.list()[2].count < 64) then -- of 
                 if crushingWheelDrawer.list()[2] and crushingWheelDrawer.list()[2].count >= 64 then
                     crusherInput.pullItems(peripheral.getName(crushingWheelDrawer),2,64)
                     local finished = false
-                        while finishe == false do
-                            if (foo) and foo.count == 64 then
-                                finished = true
-                            end
+                    while finishe == false do
+                        if (foo) and foo.count == 64 then
+                            finished = true
                         end
+                    end
                     crusherOutput.pushItems(peripheral.getName(singularityDrawer),1)
-                else debug("not enough crushing wheels")
-                    debug(crushingWheelDrawer.list()[2].count)
+                else 
+                    debug("not enough crushing wheels")
                 end
             else
                 crusherInput.pullItems(peripheral.getName(chromaticDrawer),2,1)
@@ -103,7 +121,7 @@ function crusherF()
             singularityDrawer.pullItems(peripheral.getName(crusherOutput),1)
         else debug("crushing wheel input/putput occupied")
         end
-    os.sleep(1)
+        os.sleep(1)
     end
 end
 
@@ -158,7 +176,7 @@ function pullChromaticSingularitiesFromBasin()
         os.sleep(0,2)
         for i,v in pairs(singularityBasin.list()) do   -- look in the singularity basin
             if v.name == "kubejs:dye_entangled_singularity" then --if there is chromatic singularity
-                singularityBasin.pushItems("storagedrawers:standard_drawers_1_23",i)  --push it to the grinder?
+                singularityBasin.pushItems("storagedrawers:standard_drawers_1_23",i)  --push it to the drawers?
             end
         end
     end
