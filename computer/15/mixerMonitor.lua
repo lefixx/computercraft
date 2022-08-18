@@ -59,6 +59,8 @@ function craftAlgalMix()
         for i,v in pairs(basin.list()) do
             if v.name == "architects_palette:algal_blend" then
                 algalDrawer.pullItems(peripheral.getName(basin),i)
+            elseif v.name == "create:andesite_alloy" then
+                algalDrawer.pullItems(peripheral.getName(basin),i)
             end
         end
     -- else
