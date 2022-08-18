@@ -19,7 +19,6 @@ function placeStuff()
             if turtle.getItemDetail(pb) and turtle.getItemDetail(pb).name == "thermal:gunpowder_block" then
                 for ed = 1,16 do
                     if turtle.getItemDetail(ed) and turtle.getItemDetail(ed).name == "appliedenergistics2:ender_dust" then
-                        print"here"
                         for sin = 1,16 do
                             if turtle.getItemDetail(sin) and turtle.getItemDetail(sin).name == "appliedenergistics2:singularity" then
                                 turtle.select(sin)

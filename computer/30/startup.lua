@@ -1,49 +1,48 @@
 shell.run("clear")
 
-crystalBasin = peripheral.wrap("create:basin_21")
-blastFurnace = peripheral.wrap("minecraft:blast_furnace_2")
-crystal = "forbidden_arcanus:arcane_crystal"
-crafterSticks = peripheral.wrap("create:mechanical_crafter_14")
-crafterCobble = peripheral.wrap("create:mechanical_crafter_15")
-crafterGun    = peripheral.wrap("create:mechanical_crafter_16")
--- turtle        = peripheral.wrap("turtle_2")
-crusherInput   = peripheral.wrap("create:smart_chute_1")
-crusherOutput  = peripheral.wrap("create:smart_chute_2")
-chromaticDrawer = peripheral.wrap("storagedrawers:standard_drawers_1_23")
-crushingWheelDrawer = peripheral.wrap("storagedrawers:standard_drawers_1_19")
-singularityDrawer = peripheral.wrap("storagedrawers:standard_drawers_1_20")
-singularityBasin   = peripheral.wrap("create:basin_22")
-singularityVacuum = peripheral.wrap("thermal:device_collector_3")
-gunpowderBlockDrawer = peripheral.wrap("storagedrawers:standard_drawers_1_21")
-vacuum2 = peripheral.wrap("thermal:device_collector_2")
-dyeDrawer = peripheral.wrap("storagedrawers:standard_drawers_1_22")
-turtleHopper = peripheral.wrap("minecraft:hopper_3")
-firstHopper = peripheral.wrap("minecraft:hopper_1")
-secondHopper = peripheral.wrap("minecraft:hopper_2")
-crafterCompount = peripheral.wrap("create:mechanical_crafter_12")
-radiantSheetDepot = peripheral.wrap("create:depot_26")
-mechanismDepot = peripheral.wrap("create:depot_30")
-magnetDepot = peripheral.wrap("create:depot_31")
-precisionDrawer = peripheral.wrap("storagedrawers:standard_drawers_1_12")
-mechanismDeployer = peripheral.wrap("create:deployer_9")
-inductiveDrawer = peripheral.wrap("storagedrawers:standard_drawers_1_31")
-paintballDrawers = peripheral.wrap("storagedrawers:controller_0")
+crystalBasin               = peripheral.wrap("create:basin_21")
+blastFurnace               = peripheral.wrap("minecraft:blast_furnace_2")
+crystal                    = "forbidden_arcanus:arcane_crystal"
+crafterSticks              = peripheral.wrap("create:mechanical_crafter_14")
+crafterCobble              = peripheral.wrap("create:mechanical_crafter_15")
+crafterGun                 = peripheral.wrap("create:mechanical_crafter_16")
+-- turtle                  = peripheral.wrap("turtle_2")
+crusherInput               = peripheral.wrap("create:smart_chute_1")
+crusherOutput              = peripheral.wrap("create:smart_chute_2")
+chromaticDrawer            = peripheral.wrap("storagedrawers:standard_drawers_1_23")
+crushingWheelDrawer        = peripheral.wrap("storagedrawers:standard_drawers_1_19")
+singularityDrawer          = peripheral.wrap("storagedrawers:standard_drawers_1_20")
+singularityBasin           = peripheral.wrap("create:basin_22")
+singularityVacuum          = peripheral.wrap("thermal:device_collector_3")
+gunpowderBlockDrawer       = peripheral.wrap("storagedrawers:standard_drawers_1_21")
+vacuum2                    = peripheral.wrap("thermal:device_collector_2")
+dyeDrawer                  = peripheral.wrap("storagedrawers:standard_drawers_1_22")
+turtleHopper               = peripheral.wrap("minecraft:hopper_3")
+firstHopper                = peripheral.wrap("minecraft:hopper_1")
+secondHopper               = peripheral.wrap("minecraft:hopper_2")
+crafterCompount            = peripheral.wrap("create:mechanical_crafter_12")
+radiantSheetDepot          = peripheral.wrap("create:depot_26")
+mechanismDepot             = peripheral.wrap("create:depot_30")
+magnetDepot                = peripheral.wrap("create:depot_31")
+precisionDrawer            = peripheral.wrap("storagedrawers:standard_drawers_1_12")
+mechanismDeployer          = peripheral.wrap("create:deployer_9")
+inductiveDrawer            = peripheral.wrap("storagedrawers:standard_drawers_1_31")
+paintballDrawers           = peripheral.wrap("storagedrawers:controller_0")
 radiantInductionCoilDrawer = peripheral.wrap("storagedrawers:standard_drawers_1_25")
-radiantCrafter = peripheral.wrap("create:mechanical_crafter_17")
-crystalBasinS = peripheral.getName(crystalBasin)
+radiantCrafter             = peripheral.wrap("create:mechanical_crafter_17")
+crystalBasinS              = peripheral.getName(crystalBasin)
+nextStageDrawers           = peripheral.wrap("storagedrawers:controller_2")
 
-nextStageDrawers = peripheral.wrap("storagedrawers:controller_2")
 
-
-green = "appliedenergistics2:green_paint_ball"
-blue = "appliedenergistics2:blue_paint_ball"
-red = "appliedenergistics2:red_paint_ball"
+green   = "appliedenergistics2:green_paint_ball"
+blue    = "appliedenergistics2:blue_paint_ball"
+red     = "appliedenergistics2:red_paint_ball"
 magenta = "appliedenergistics2:magenta_paint_ball"
-yellow = "appliedenergistics2:yellow_paint_ball"
+yellow  = "appliedenergistics2:yellow_paint_ball"
 
 
 function debug(x)
-    if false then print(x) end
+    if true then print(x) end
 end
 
 function crystalBasinF()
@@ -74,25 +73,26 @@ function craftersF()
     while true do
         crafterSticks.pullItems("storagedrawers:standard_drawers_4_15",4,5)
         
-        
-        local amount,slot
-        for i,v in pairs(nextStageDrawers.list()) do 
-            if v.name == "minecraft:cobblestone" then
-                slot = i
-                amount = v.count
+        if not nextStageDrawers.list() then
+            local amount,slot
+            for i,v in pairs(nextStageDrawers.list()) do 
+                if v.name == "minecraft:cobblestone" then
+                    slot = i
+                    amount = v.count
+                end
             end
-        end
-        
-        if amount and amount > 512 then
             
-            crafterCobble.pullItems(peripheral.getName(nextStageDrawers), slot,16)
-            
-            
-            
-            if not gunpowderBlockDrawer.list()[2] or (gunpowderBlockDrawer.list(2) and gunpowderBlockDrawer.list()[2].count < 200) then
-                crafterGun.pullItems("storagedrawers:standard_drawers_4_14",3,9)
+            if amount and amount > 512 then
+                
+                crafterCobble.pullItems(peripheral.getName(nextStageDrawers), slot,16)
+                
+                
+                
+                if not gunpowderBlockDrawer.list()[2] or (gunpowderBlockDrawer.list(2) and gunpowderBlockDrawer.list()[2].count < 200) then
+                    crafterGun.pullItems("storagedrawers:standard_drawers_4_14",3,9)
+                end
+                os.sleep(0.5)
             end
-            os.sleep(0.5)
         end
     end
 end
@@ -101,7 +101,7 @@ function crusherF()
     while true do
         local foo = crusherOutput.list()[1]
         if (not crusherInput.list()[1]) and (not foo) then
-            if (singularityDrawer.list()[2]) and (singularityDrawer.list()[2].count < 64) then -- of 
+            if ((singularityDrawer.list()[2]) and (singularityDrawer.list()[2].count < 64)) or (not (singularityDrawer.list()[2])) then -- of 
                 if crushingWheelDrawer.list()[2] and crushingWheelDrawer.list()[2].count >= 64 then
                     crusherInput.pullItems(peripheral.getName(crushingWheelDrawer),2,64)
                     local finished = false
