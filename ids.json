@@ -5,7 +5,7 @@
   "peripheral.storagedrawers:standard_drawers_1": 32,
   "peripheral.minecraft:chest": 1,
   "peripheral.drive": 0,
-  "peripheral.thermal:machine_press": 4,
+  "peripheral.thermal:machine_press": 5,
   "peripheral.tconstruct:crafting_station": 1,
   "peripheral.waterstrainer:strainer": 0,
   "peripheral.turtle": 8,
@@ -50,5 +50,6 @@
   "peripheral.thermal:machine_bottler": 0,
   "peripheral.thermal:machine_smelter": 0,
   "peripheral.thermal:machine_pyrolyzer": 0,
-  "peripheral.create:belt": 3
+  "peripheral.create:belt": 3,
+  "peripheral.supplementaries:item_shelf": 1
 }

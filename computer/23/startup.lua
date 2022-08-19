@@ -1,23 +1,58 @@
 furnace = peripheral.wrap("minecraft:furnace_2")
 drawer = peripheral.wrap("storagedrawers:standard_drawers_4_11")
 treeFarmDrawer = peripheral.wrap("storagedrawers:standard_drawers_4_15")
--- turtleCoalDrawer = peripheral.wrap("storagedrawers:standard_drawers_1_26")
 
-charcoalSlot = 3
-logSlot = 2
 topSlot = 1
 bottomSlot = 2
 outputSlot = 3
 
-while true do
-    print(furnace.pullItems(peripheral.getName(treeFarmDrawer),3,64,2)) --
-    print(furnace.pullItems(peripheral.getName(drawer),logSlot,1,topSlot)) --put wood in top slot
-    -- print(furnace.pullItems(peripheral.getName(drawer),charcoalSlot,1,topSlot)) --put charcoal in top slot
-    print(furnace.pullItems(peripheral.getName(drawer),charcoalSlot,1,bottomSlot)) --put charcoal in bottom slot
-    print(drawer.pullItems(peripheral.getName(furnace),outputSlot))
-    -- print(drawer.pushItems(peripheral.getName(turtleCoalDrawer),3))
-    print(furnace.pullItems(peripheral.getName(treeFarmDrawer),2,64,1)) --
-    print(furnace.pullItems(peripheral.getName(drawer),4,64)) --
-    -- print(drawer.pushItems(peripheral.getName(furnace),charcoalSlot,1,bottomSlot))
-    os.sleep(1)
+
+function haveSamplings()
+    if treeFarmDrawer.list()[3] and treeFarmDrawer.list()[3].count > 200 then 
+        return true
+    end
+    return false
 end
+
+function burnSampling()
+    furnace.pullItems(peripheral.getName(treeFarmDrawer),3,64,bottomSlot)
+end
+
+function haveCharcoal()
+    if drawer.list()[3] then
+        return true
+    end
+    return false
+end
+
+function burnCharcoal()
+    furnace.pullItems(peripheral.getName(drawer),3,1)
+end
+
+
+
+function bottomSlotManager()
+    if haveSamplings() then
+        burnSampling()
+    elseif haveCharcoal() then
+        burnCharcoal() 
+    end
+end
+
+function topSlotManager()
+    while true do os.sleep(1)
+        if not drawer.list()[topSlot] then
+            furnace.pullItems(peripheral.getName(treeFarmDrawer),2,64,topSlot)
+        end
+    end
+end
+
+function outputSlotManager()
+    while true do os.sleep(1)
+        if furnace.list()[outputSlot] then
+            drawer.pullItems(peripheral.getName(furnace),outputSlot)
+        end
+    end
+end
+
+parallel.waitForAll(bottomSlotManager,topSlotManager,outputSlotManager)
