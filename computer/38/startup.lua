@@ -11,8 +11,8 @@ potato           = {4315, 67, -2816, "East"}
 onion            = {4315, 67, -2813, "East"}
 flax             = {4315, 67, -2810, "East"}
 rice             = {4315, 67, -2807, "East"}
-pumpkin         =  {4312, 67, -2829, "West"}
-melon            = {4312, 67, -2825, "West"}
+pumpkin         =  {4311, 67, -2829, "West"}
+melon            = {4311, 67, -2825, "West"}
 sugarCane        = {4312, 67, -2831, "West"}
 
 --TODO move pumkins and mellons one layer down
@@ -531,23 +531,24 @@ function glidePumpkin()
     emptyInv()
     
     moveTo(pumpkin)
+    goForward()
     for i =1,8 do
-        if turtle.detect() then
-            turtle.dig()
+        if turtle.detectDown() then
+            turtle.digDown()
         end
         goForward()
     end
-    goForward()
     turnTowards("South")
-    if turtle.detect() then
-        turtle.dig()
+    goForward()
+    if turtle.detectDown() then
+        turtle.digDown()
     end
     goForward()
-    goForward()
     turnTowards("East")
+    goForward()
     for i =1,8 do
-        if turtle.detect() then
-            turtle.dig()
+        if turtle.detectDown() then
+            turtle.digDown()
         end
         goForward()
     end

@@ -3,6 +3,8 @@ shell.run("clear")
 pumkin = "minecraft:pumpkin"
 potato = "minecraft:potato"
 onion  = "farmersdelight:onion"
+melon  = "minecraft:melon_slice"
+carrot = "minecraft:carrot"
 
 trader      = peripheral.wrap("front")
 drawer      = peripheral.wrap("back")
@@ -15,6 +17,16 @@ chuteName   = peripheral.getName(chute)
 
 function clearTrader()
     trader.pushItems(drawerName,3)
+end
+
+function clearTurtle()
+    for i = 1,16 do
+        if turtle.getItemCount(i) > 0 then
+            turtle.select(i)
+            turtle.dropDown()
+        end
+    end
+    turtle.select(1)
 end
 
 function sellPumkins()
@@ -53,6 +65,38 @@ function sellOnions()
     clearTrader()
 end
 
+function sellMelons()
+    chute.pullItems(drawerName, find(melon),54)
+    os.sleep(1)
+    turtle.select(1)
+        for i = 2,11 do
+            if i ~= 4 and i ~= 8 then 
+                turtle.transferTo(i,6)
+            end
+        end
+    turtle.craft()
+    turtle.drop()
+    os.sleep(1)
+    clearTrader()
+
+end
+
+function sellCarrots()
+    chute.pullItems(drawerName, find(carrot),54)
+    os.sleep(1)
+    turtle.select(1)
+        for i = 2,11 do
+            if i ~= 4 and i ~= 8 then 
+                turtle.transferTo(i,6)
+            end
+        end
+    turtle.craft()
+    turtle.drop()
+    os.sleep(1)
+    clearTrader()
+
+end
+
 function find(name)
     for i,v in pairs(drawer.list()) do
         if v.name == name then return i end
@@ -68,9 +112,14 @@ function selling()
             sellPotatoes()
         elseif drawer.getItemDetail(find(onion)).count > 512 then 
             sellOnions()
+        elseif drawer.getItemDetail(find(carrot)).count > 512 then
+            sellCarrots()
+        elseif drawer.getItemDetail(find(melon)).count > 512 then
+            sellMelons()
         end
     os.sleep(1) end
 end
 
+clearTurtle()
 clearTrader()
 selling()
