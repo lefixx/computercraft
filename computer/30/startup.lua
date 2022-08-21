@@ -168,15 +168,16 @@ function singularities()
 
         for i,v in pairs(singularityBasin.list()) do
             if v.name == "appliedenergistics2:quantum_entangled_singularity" then
-                hasSing = true
-                debug(check)
+                print(hasSing)
             end
         end
-
-
+        
+        
+        
         if not hasSing then
             for z,v in pairs(singularityVacuum.list()) do
-                singularityBasin.pullItems(peripheral.getName(singularityVacuum),z)
+                if singularityBasin.pullItems(peripheral.getName(singularityVacuum),z,1) then
+                end
             end
         end
 

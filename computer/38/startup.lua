@@ -625,7 +625,6 @@ function reportFuel()
 end
 
 
-glideMelon()
 while true do 
     
     glideWheat()
