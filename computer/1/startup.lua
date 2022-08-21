@@ -19,7 +19,7 @@ drainOutput     = peripheral.wrap("create:chute_7")
 sandCell        = peripheral.wrap("thermal:fluid_cell_9")
 induction       = peripheral.wrap("thermal:machine_smelter_0")
 pyroliser       = peripheral.wrap("thermal:machine_pyrolyzer_0")
-charcoalDrawer  = peripheral.wrap("storagedrawers:standard_drawers_4_12")
+charcoalDrawer  = peripheral.wrap("storagedrawers:standard_drawers_4_11")
 creosoteCell    = peripheral.wrap("thermal:fluid_cell_10")
 belt1           = peripheral.wrap("create:belt_3")
 coalChunksDepot = peripheral.wrap("create:depot_34")
@@ -204,6 +204,7 @@ function pressManager()
         drawers.pullItems(peripheral.getName(basin),i)
     end
     while true do os.sleep(1)
+        print(haveEnough("kubejs:coke_chunk",500,500))
         if haveEnough("thermal:basalz_powder",500,500) and not haveEnough("thermal:earth_charge",1000,1000) then
             craftEarthCharge()
         elseif haveEnough("thermal:blizz_powder",500,500) and not haveEnough("thermal:ice_charge",1000,1000) then
@@ -401,7 +402,7 @@ end
 function pyroliserManager()
     while true do os.sleep(1)
         if not haveEnough("thermal:coal_coke",1000,1000) then
-            charcoalDrawer.pushItems(peripheral.getName(pyroliser),3,10)
+            charcoalDrawer.pushItems(peripheral.getName(pyroliser),2,10)
             
             while pyroliser.list()[1] do 
                 os.sleep(0.2)
@@ -438,8 +439,9 @@ function deployerEquip(item)
     deployer.pullItems(peripheral.getName(drawers),findInDrawers(item),1)
 end
 
-function deployerLoad(item)
-    deployerDepot.pullItems(peripheral.getName(drawers),findInDrawers(item),1)
+function deployerLoad(item,count)
+    if count == nil then count = 1 end
+    deployerDepot.pullItems(peripheral.getName(drawers),findInDrawers(item),count)
 end
 
 function deployerClear()
@@ -452,9 +454,12 @@ end
 function craftPrintedSilicon()
     deployerClear()
     deployerEquip("appliedenergistics2:silicon_press")
-    deployerLoad("appliedenergistics2:silicon")
-    os.sleep(1)
-    deployerDepot.pushItems(peripheral.getName(drawers),1)
+    deployerLoad("appliedenergistics2:silicon",10)
+    while deployerDepot.list()[1].name == "appliedenergistics2:silicon" do
+        os.sleep(0.2)
+    end
+    -- os.sleep(1)
+    -- deployerDepot.pushItems(peripheral.getName(drawers),1)
     deployerClear()
 
 end
