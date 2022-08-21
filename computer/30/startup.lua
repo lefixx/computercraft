@@ -86,7 +86,8 @@ function craftersF()
     while true do
         crafterSticks.pullItems("storagedrawers:standard_drawers_4_15",4,5)
         
-        if not nextStageDrawers.list() then
+        if nextStageDrawers.list() then
+            print"asdf"
             local amount,slot
             for i,v in pairs(nextStageDrawers.list()) do 
                 if v.name == "minecraft:cobblestone" then
@@ -114,7 +115,7 @@ function crusherF()
     while true do
         local foo = crusherOutput.list()[1]
         if (not crusherInput.list()[1]) and (not foo) then
-            if ((singularityDrawer.list()[2]) and (singularityDrawer.list()[2].count < 64)) or (not (singularityDrawer.list()[2])) then -- of 
+            if ((singularityDrawer.list()[2]) and (singularityDrawer.list()[2].count < 64)) then 
                 if crushingWheelDrawer.list()[2] and crushingWheelDrawer.list()[2].count >= 64 then
                     crusherInput.pullItems(peripheral.getName(crushingWheelDrawer),2,64)
                     local finished = false
@@ -156,9 +157,11 @@ function singularities()
         debug(count)
         if count <= 10 then
             debug"less than 10"
-            turtleHopper.pullItems("storagedrawers:standard_drawers_4_14",4,8)
-            turtleHopper.pullItems(peripheral.getName(singularityDrawer),2,8)
-            turtleHopper.pullItems(peripheral.getName(gunpowderBlockDrawer),2,1)
+            if turtleHopper.pullItems(peripheral.getName(singularityDrawer),2,8) then
+                if turtleHopper.pullItems("storagedrawers:standard_drawers_4_14",4,8) then
+                    turtleHopper.pullItems(peripheral.getName(gunpowderBlockDrawer),2,1)
+                end
+            end
             os.sleep(20)
         end
 

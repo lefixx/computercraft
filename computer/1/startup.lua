@@ -204,7 +204,7 @@ function pressManager()
         drawers.pullItems(peripheral.getName(basin),i)
     end
     while true do os.sleep(1)
-        print(haveEnough("kubejs:coke_chunk",500,500))
+
         if haveEnough("thermal:basalz_powder",500,500) and not haveEnough("thermal:earth_charge",1000,1000) then
             craftEarthCharge()
         elseif haveEnough("thermal:blizz_powder",500,500) and not haveEnough("thermal:ice_charge",1000,1000) then
@@ -402,6 +402,7 @@ end
 function pyroliserManager()
     while true do os.sleep(1)
         if not haveEnough("thermal:coal_coke",1000,1000) then
+            charcoalDrawer.pushItems(peripheral.getName(pyroliser),3,10)
             charcoalDrawer.pushItems(peripheral.getName(pyroliser),2,10)
             
             while pyroliser.list()[1] do 
@@ -466,26 +467,27 @@ end
 
 function craftCalculationMechanism()
     deployerClear()
-    deployerDepot.pullItems(peripheral.getName(inductiveChest),2,1)
-
-    deployerEquip("appliedenergistics2:printed_silicon")
-    deployerEquip("appliedenergistics2:printed_silicon")
-
-    os.sleep(0.7)
-    deployerEquip("kubejs:flash_drive")
-    os.sleep(0.5)
-    deployerClear()
+    if not haveEnough("kubejs:calculation_mechanism",1999,1999) then
+        deployerDepot.pullItems(peripheral.getName(inductiveChest),2,1)
+        
+        deployerEquip("appliedenergistics2:printed_silicon")
+        deployerEquip("appliedenergistics2:printed_silicon")
+        
+        os.sleep(0.7)
+        deployerEquip("kubejs:flash_drive")
+        os.sleep(0.5)
+        deployerClear()
+    end
 end
 
 function deployerManager()
     deployerClear()
-    while true do os.sleep(1)
+    while true do os.sleep(0.5)
         if not haveEnough("appliedenergistics2:printed_silicon",1000,1000) and haveEnough("appliedenergistics2:silicon",500,500) then
             craftPrintedSilicon()
-            if haveEnough("appliedenergistics2:printed_silicon",500,500) and not haveEnough("kubejs:calculation_mechanism",4000,4000) then
-                craftCalculationMechanism()
-            end
-        end
+        elseif haveEnough("appliedenergistics2:printed_silicon",500,500) and not haveEnough("kubejs:calculation_mechanism",4000,4000) then
+            craftCalculationMechanism()
+       end
     end
 end
 

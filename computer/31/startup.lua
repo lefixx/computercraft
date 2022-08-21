@@ -10,7 +10,7 @@ function placeStuff()
                             if turtle.getItemDetail(sin) and turtle.getItemDetail(sin).name == "appliedenergistics2:singularity"  then
                                 turtle.select(sin)
                                 turtle.drop()
-                                turtle.select(ed)inspectDown
+                                turtle.select(ed)
                                 turtle.drop()
                                 turtle.select(pb)
                                 turtle.place()
