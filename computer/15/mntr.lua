@@ -24,10 +24,10 @@ while true do
 
     shell.run("clear")
     print(kelpDrawer.getItemDetail(2).displayName,kelpDrawer.list()[2].count,"/ 1000")
-    print(cobbleDrawer.getItemDetail(5).displayName ,cobbleDrawer.getItemDetail(5).count,"/ 1000") -- gabbro
-    print(cobbleDrawer.getItemDetail(2).displayName ,cobbleDrawer.getItemDetail(2).count,"/ 1000") --diortie
-    print(cobbleDrawer.getItemDetail(3).displayName ,cobbleDrawer.getItemDetail(3).count,"/ 1000") --granite
-    print(cobbleDrawer.getItemDetail(4).displayName ,cobbleDrawer.getItemDetail(4).count,"/ 1000") --andesite
+    print(cobbleDrawer.getItemDetail(5).displayName ,cobbleDrawer.getItemDetail(2).count,"/ 1000") -- gabbro
+    print(cobbleDrawer.getItemDetail(2).displayName ,cobbleDrawer.getItemDetail(3).count,"/ 1000") --diortie
+    print(cobbleDrawer.getItemDetail(3).displayName ,cobbleDrawer.getItemDetail(4).count,"/ 1000") --granite
+    print(cobbleDrawer.getItemDetail(4).displayName ,cobbleDrawer.getItemDetail(5).count,"/ 1000") --andesite
     if treeDrawer.list()[2] then print(treeDrawer.getItemDetail(2).displayName ,treeDrawer.getItemDetail(2).count,"/ 1000") end
     if treeDrawer.list()[3] then print(treeDrawer.getItemDetail(3).displayName ,treeDrawer.getItemDetail(3).count,"/ 1000") end
     print(treeDrawer.getItemDetail(4).displayName ,treeDrawer.getItemDetail(4).count,"/ 1000")
@@ -43,29 +43,27 @@ while true do
     -- if miningTrade.list()[3] and trade.list()[3].count == 0 then print "FULL COIN" end
 
     if kelpInv >= 1000 then
-        print("Selling eccess kelp")
         trade.pullItems("storagedrawers:standard_drawers_4_4",2,64)
     end
 
     if treeDrawer.list()[2] and treeDrawer.list()[2].count >= 1000 then
-        print"Selling eccess wood"
         carpentryTrade.pullItems("storagedrawers:standard_drawers_4_15",2,64)
     end
 
     if not bulkBlastDepot.list()[1] then --if depot is empty
-        print"baster is emptu"
+        -- print"baster is emptu"
         if cobbleDrawer.list()[5].count >= 1000 then
             bulkBlastDepot.pullItems("storagedrawers:standard_drawers_4_5",5,64)
-            print"blasting gabbro"
+            -- print"blasting gabbro"
         elseif cobbleDrawer.list()[2].count >= 1000 then
             bulkBlastDepot.pullItems("storagedrawers:standard_drawers_4_5",2,64)
-            print"blasting diorite"
+            -- print"blasting diorite"
         elseif cobbleDrawer.list()[3].count >= 1000 then
             bulkBlastDepot.pullItems("storagedrawers:standard_drawers_4_5",3,64)
-            print"blasting granite"
+            -- print"blasting granite"
         elseif cobbleDrawer.list()[4].count >= 1000 then
             bulkBlastDepot.pullItems("storagedrawers:standard_drawers_4_5",4,64)
-            print"blasting andesite"
+            -- print"blasting andesite"
         end
     end
 

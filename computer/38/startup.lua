@@ -218,8 +218,8 @@ function getType()
 end
 
 function emptyInv()
-    checkFuelAndRefuel()
     moveTo(inventoryStation)
+    checkFuelAndRefuel()
     for i = 1,16 do
         if turtle.refuel(i) == true then
             print("BURNABLE")
@@ -607,8 +607,18 @@ end
 
 function reportFuel()
 
+    local coalCount
+    local drawer = peripheral.wrap("front")
+    for i,v in pairs(drawer.list()) do
+        if v.name == "minecraft:charcoal" then
+            coalCount = v.count
+        end
+    end
+
+    coalCount = math.floor(coalCount/20,48)
+    print("coal"..coalCount)
     rednet.open("Left")
-    rednet.broadcast(turtle.getFuelLevel())
+    rednet.broadcast({turtle.getFuelLevel(),coalCount})
     rednet.close("Left")
 
 end

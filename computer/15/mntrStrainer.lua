@@ -19,7 +19,7 @@ while true do
         print("requesting new sediment strainer")
         requestSedimentStrainer()
         os.sleep(20)
-    else print("strainer:",strainer.getItemDetail(1).durability)
+    else print("strainer:",math.floor(strainer.getItemDetail(1).durability*100).."%")
     end
     os.sleep(5)
 end

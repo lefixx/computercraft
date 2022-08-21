@@ -32,7 +32,7 @@ radiantInductionCoilDrawer = peripheral.wrap("storagedrawers:standard_drawers_1_
 radiantCrafter             = peripheral.wrap("create:mechanical_crafter_17")
 crystalBasinS              = peripheral.getName(crystalBasin)
 nextStageDrawers           = peripheral.wrap("storagedrawers:controller_2")
-
+cokeDrawer                 = peripheral.wrap("storagedrawers:controller_2")
 
 green   = "appliedenergistics2:green_paint_ball"
 blue    = "appliedenergistics2:blue_paint_ball"
@@ -44,6 +44,18 @@ yellow  = "appliedenergistics2:yellow_paint_ball"
 function debug(x)
     if true then print(x) end
 end
+
+
+
+
+function burnCoke()
+    for i,v in pairs(cokeDrawer.list()) do
+        if v.name == "thermal:coal_coke" then
+            blastFurnace.pullItems(peripheral.getName(cokeDrawer),i,1,2)
+        end
+    end
+end
+
 
 function crystalBasinF()
     while true do
@@ -64,7 +76,8 @@ end
 function blastFurnaceF()
     while true do
             blastFurnace.pushItems(crystalBasinS,3,64)
-            blastFurnace.pullItems("storagedrawers:standard_drawers_4_11",3,32,2)
+            -- blastFurnace.pullItems("storagedrawers:standard_drawers_4_11",3,32,2)
+            burnCoke()
         os.sleep(10)
     end
 end
@@ -233,7 +246,7 @@ function craftMechanisms()
             end
         elseif mechanismDepot.list()[1] and mechanismDepot.list()[1].name == "kubejs:incomplete_inductive_mechanism" then
             mechanismDeployer.pullItems(peripheral.getName(radiantInductionCoilDrawer),2,1)
-            os.sleep(1)
+            os.sleep(0.7)
             mechanismDeployer.pushItems(peripheral.getName(radiantInductionCoilDrawer),1)
             mechanismDeployer.pullItems(peripheral.getName(magnetDepot),1)
             os.sleep(0.4)
