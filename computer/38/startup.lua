@@ -564,23 +564,24 @@ function glideMelon()
     moveTo(melon)
     turnTowards("West")
     for i =1,8 do
-        if turtle.detect() then
-            turtle.dig()
+        if turtle.detectDown() then
+            turtle.digDown()
         end
         goForward()
     end
     goForward()
     turnTowards("South")
-    if turtle.detect() then
-        turtle.dig()
+
+    if turtle.detectDown() then
+        turtle.digDown()
     end
     goForward()
     
     goForward()
     turnTowards("East")
     for i =1,8 do
-        if turtle.detect() then
-            turtle.dig()
+        if turtle.detectDown() then
+            turtle.digDown()
         end
         goForward()
     end
@@ -624,7 +625,7 @@ function reportFuel()
 end
 
 
-
+glideMelon()
 while true do 
     
     glideWheat()
