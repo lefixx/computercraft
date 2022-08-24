@@ -1,6 +1,6 @@
 {
   "computer": 41,
-  "peripheral.computer": 30,
+  "peripheral.computer": 32,
   "peripheral.storagedrawers:standard_drawers_4": 15,
   "peripheral.storagedrawers:standard_drawers_1": 32,
   "peripheral.minecraft:chest": 1,
@@ -14,7 +14,7 @@
   "peripheral.create:millstone": 5,
   "peripheral.monitor": 6,
   "peripheral.create:chute": 7,
-  "peripheral.create:depot": 35,
+  "peripheral.create:depot": 38,
   "peripheral.create:saw": 4,
   "peripheral.storagedrawers:standard_drawers_2": 7,
   "peripheral.create:basin": 26,
@@ -28,7 +28,7 @@
   "peripheral.create:spout": 5,
   "peripheral.tconstruct:tank": 2,
   "peripheral.create:crushing_wheel_controller": 2,
-  "peripheral.create:mechanical_crafter": 21,
+  "peripheral.create:mechanical_crafter": 25,
   "peripheral.metalbarrels:silver_tile": 1,
   "peripheral.thermal:dynamo_stirling": 2,
   "peripheral.tconstruct:heater": 0,
@@ -51,5 +51,7 @@
   "peripheral.thermal:machine_smelter": 0,
   "peripheral.thermal:machine_pyrolyzer": 0,
   "peripheral.create:belt": 3,
-  "peripheral.supplementaries:item_shelf": 1
+  "peripheral.supplementaries:item_shelf": 1,
+  "peripheral.tconstruct:smeltery": 0,
+  "peripheral.tconstruct:drain": 0
 }

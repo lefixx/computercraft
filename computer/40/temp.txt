@@ -1,0 +1,50 @@
+{
+  {
+    name = "kubejs:matrix",
+    amount = 350,
+  },
+  {
+    name = "kubejs:raw_logic",
+    amount = 5681,
+  },
+  {
+    name = "kubejs:number_0",
+    amount = 9,
+  },
+  {
+    name = "kubejs:number_1",
+    amount = 9,
+  },
+  {
+    name = "kubejs:number_2",
+    amount = 9,
+  },
+  {
+    name = "kubejs:number_3",
+    amount = 9,
+  },
+  {
+    name = "kubejs:number_4",
+    amount = 9,
+  },
+  {
+    name = "kubejs:number_5",
+    amount = 9,
+  },
+  {
+    name = "kubejs:number_6",
+    amount = 9,
+  },
+  {
+    name = "kubejs:number_7",
+    amount = 9,
+  },
+  {
+    name = "kubejs:number_8",
+    amount = 9,
+  },
+  {
+    name = "kubejs:number_9",
+    amount = 9,
+  },
+}
